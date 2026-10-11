@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build seguro · Cartilla digital</title>
+<meta name="description" content="Cartilla digital: recomendaciones de desarrollo seguro centradas en el proceso de compilación y las dependencias del software.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="barra">
+  <a class="marca" href="#p1">BUILD<span>SEGURO</span></a>
+  <nav class="barra-nav" aria-label="Navegación de páginas">
+    <button id="ant" aria-label="Página anterior">&larr;</button>
+    <span id="contador" aria-live="polite">1 / 13</span>
+    <button id="sig" aria-label="Página siguiente">&rarr;</button>
+  </nav>
+</header>
+
+<main id="libro">
+
+<!-- ═════════════════ 1. PORTADA ═════════════════ -->
+<section class="pagina portada" id="p1" data-titulo="Portada">
+  <div class="portada-arte" aria-hidden="true">
+    <svg viewBox="0 0 800 420" role="img">
+      <defs>
+        <pattern id="rejilla" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M20 0H0V20" fill="none" stroke="#ffffff10" stroke-width="1"/>
+        </pattern>
+        <linearGradient id="haz" x1="0" x2="1">
+          <stop offset="0" stop-color="#36d399" stop-opacity="0"/>
+          <stop offset=".5" stop-color="#36d399" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#36d399" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="800" height="420" fill="url(#rejilla)"/>
+      <!-- banda transportadora -->
+      <rect x="0" y="262" width="800" height="14" fill="#1f2a44"/>
+      <g fill="#2d3b5c">
+        <circle cx="40" cy="269" r="5"/><circle cx="120" cy="269" r="5"/><circle cx="200" cy="269" r="5"/><circle cx="280" cy="269" r="5"/><circle cx="360" cy="269" r="5"/><circle cx="440" cy="269" r="5"/><circle cx="520" cy="269" r="5"/><circle cx="600" cy="269" r="5"/><circle cx="680" cy="269" r="5"/><circle cx="760" cy="269" r="5"/>
+      </g>
+      <!-- compuertas -->
+      <g>
+        <rect x="230" y="120" width="16" height="142" fill="#f6c453"/>
+        <rect x="230" y="112" width="74" height="16" fill="#f6c453"/>
+        <rect x="288" y="120" width="16" height="142" fill="#f6c453"/>
+        <text x="267" y="104" fill="#f6c453" font-family="JetBrains Mono" font-size="13" text-anchor="middle">SAST</text>
+        <rect x="420" y="120" width="16" height="142" fill="#f6c453"/>
+        <rect x="420" y="112" width="74" height="16" fill="#f6c453"/>
+        <rect x="478" y="120" width="16" height="142" fill="#f6c453"/>
+        <text x="457" y="104" fill="#f6c453" font-family="JetBrains Mono" font-size="13" text-anchor="middle">SCA</text>
+        <rect x="610" y="120" width="16" height="142" fill="#f6c453"/>
+        <rect x="610" y="112" width="74" height="16" fill="#f6c453"/>
+        <rect x="668" y="120" width="16" height="142" fill="#f6c453"/>
+        <text x="647" y="104" fill="#f6c453" font-family="JetBrains Mono" font-size="13" text-anchor="middle">DAST</text>
+      </g>
+      <!-- haz de escaneo -->
+      <rect x="430" y="128" width="54" height="134" fill="url(#haz)"/>
+      <!-- paquetes -->
+      <g font-family="JetBrains Mono" font-size="11" text-anchor="middle">
+        <rect x="70" y="214" width="56" height="48" rx="4" fill="#e8edf7"/>
+        <path d="M70 230h56" stroke="#9aa6bf"/>
+        <text x="98" y="252" fill="#1f2a44">.jar</text>
+        <rect x="150" y="214" width="56" height="48" rx="4" fill="#e8edf7"/>
+        <path d="M150 230h56" stroke="#9aa6bf"/>
+        <text x="178" y="252" fill="#1f2a44">.jar</text>
+        <!-- paquete detenido -->
+        <rect x="430" y="214" width="56" height="48" rx="4" fill="#ff5a5f"/>
+        <path d="M430 230h56" stroke="#ffffff70"/>
+        <text x="458" y="252" fill="#fff">log4j</text>
+        <!-- paquete aprobado -->
+        <rect x="716" y="214" width="56" height="48" rx="4" fill="#36d399"/>
+        <path d="M716 230h56" stroke="#ffffff80"/>
+        <path d="M733 246l8 8 16-16" stroke="#0b1324" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- señal de alto -->
+      <g transform="translate(458 168)">
+        <polygon points="-22,-9 -9,-22 9,-22 22,-9 22,9 9,22 -9,22 -22,9" fill="#ff5a5f" stroke="#0b1324" stroke-width="3"/>
+        <path d="M-8 -8L8 8M8 -8L-8 8" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <!-- código fuente entrando -->
+      <g font-family="JetBrains Mono" font-size="12" fill="#8fa3c8">
+        <text x="20" y="60">&lt;dependency&gt;</text>
+        <text x="36" y="78">log4j-core 2.14.1</text>
+        <text x="20" y="96">&lt;/dependency&gt;</text>
+        <text x="560" y="372">mvn verify ✗ BUILD FAILURE</text>
+        <text x="560" y="392" fill="#36d399">mvn verify ✓ BUILD SUCCESS</text>
+      </g>
+    </svg>
+  </div>
+  <div class="portada-texto">
+    <p class="sobretitulo">Cartilla digital · Desarrollo seguro de software</p>
+    <h1>Build seguro<span>que no compile lo inseguro</span></h1>
+    <p class="portada-lema">Recomendaciones para asegurar el proceso de compilación y las dependencias del software</p>
+  </div>
+</section>
+
+<!-- ═════════════════ 2. PÁGINA LEGAL ═════════════════ -->
+<section class="pagina legal" id="p2" data-titulo="Página legal">
+  <div class="legal-bloque">
+    <p class="legal-titulo">Build seguro: que no compile lo inseguro</p>
+    <p>Cartilla digital sobre recomendaciones de desarrollo seguro centradas en el proceso de compilación y las dependencias del software.</p>
+    <dl>
+      <dt>Autora</dt><dd>Nohra María Vizcaíno Florez</dd>
+      <dt>Fecha</dt><dd>12 de octubre de 2026</dd>
+      <dt>Curso</dt><dd>Seguridad en el Desarrollo de Software · Semana 7</dd>
+      <dt>Institución</dt><dd>Corporación Universitaria Minuto de Dios – UNIMINUTO</dd>
+      <dt>Caso práctico</dt><dd><a href="https://github.com/EspNohraViz/cartilla-build-seguro">github.com/EspNohraViz/cartilla-build-seguro</a></dd>
+    </dl>
+    <p class="legal-nota">Las ilustraciones, diagramas y capturas de esta cartilla son de elaboración propia, a partir del caso práctico publicado en el repositorio indicado. Las fuentes consultadas se citan en el texto y se listan en las referencias, según normas APA 7.ª edición.</p>
+  </div>
+</section>
+
+<!-- ═════════════════ 3. CONTENIDO ═════════════════ -->
+<section class="pagina" id="p3" data-titulo="Tabla de contenido">
+  <h2 class="titulo-pagina">Contenido</h2>
+  <ol class="indice">
+    <li><a href="#p4"><span>Introducción</span><i>4</i></a></li>
+    <li><a href="#p5"><span>El mapa: la práctica <em>Secure Build</em> de OWASP SAMM</span><i>5</i></a></li>
+    <li class="cap"><a href="#p6"><b>1</b><span>Definir formalmente el proceso de compilación</span><i>6</i></a></li>
+    <li class="cap"><a href="#p7"><b>2</b><span>Automatizar el build y asegurar las herramientas</span><i>7</i></a></li>
+    <li class="cap"><a href="#p8"><b>3</b><span>Comprobaciones obligatorias que detienen el build</span><i>8</i></a></li>
+    <li class="cap"><a href="#p9"><b>4</b><span>Evaluar las dependencias</span><i>9</i></a></li>
+    <li class="cap"><a href="#p10"><b>5</b><span>Caso práctico: el pipeline en acción</span><i>10</i></a></li>
+    <li class="cap"><a href="#p11"><b>6</b><span>Análisis estático y dinámico: dos miradas complementarias</span><i>11</i></a></li>
+    <li><a href="#p12"><span>Conclusiones</span><i>12</i></a></li>
+    <li><a href="#p13"><span>Referencias</span><i>13</i></a></li>
+  </ol>
+</section>
+
+<!-- ═════════════════ 4. INTRODUCCIÓN ═════════════════ -->
+<section class="pagina" id="p4" data-titulo="Introducción">
+  <h2 class="titulo-pagina">Introducción</h2>
+  <div class="texto pendiente" data-guia="Propósito · ¿A quién va dirigida? · Contenido · Importancia">
+    <p>[Texto de la introducción]</p>
+  </div>
+  <blockquote class="frase">«El código se revisa; el build se demuestra».</blockquote>
+</section>
+
+<!-- ═════════════════ 5. MAPA SAMM ═════════════════ -->
+<section class="pagina" id="p5" data-titulo="El mapa: Secure Build">
+  <p class="etiqueta">Antes de empezar</p>
+  <h2 class="titulo-pagina">El mapa: la práctica <em>Secure Build</em></h2>
+  <div class="texto pendiente" data-guia="Qué es SAMM, qué es la práctica Secure Build y sus dos líneas">
+    <p>[Texto breve sobre SAMM y Secure Build]</p>
+  </div>
+  <figure class="figura">
+    <div class="escalera">
+      <div class="escalera-cab"></div>
+      <div class="escalera-cab">Línea A · Proceso de compilación</div>
+      <div class="escalera-cab">Línea B · Dependencias</div>
+
+      <div class="nivel n1">Nivel 1<small>repetible y consistente</small></div>
+      <div class="celda">Definir formalmente el proceso de compilación. <a href="#p6">Cap. 1</a></div>
+      <div class="celda">Llevar una lista de materiales (SBOM) y revisarla. <a href="#p9">Cap. 4</a></div>
+
+      <div class="nivel n2">Nivel 2<small>automatizado e integrado</small></div>
+      <div class="celda">Automatizar el pipeline, asegurar las herramientas y agregar controles. <a href="#p7">Cap. 2</a></div>
+      <div class="celda">Evaluar las dependencias y reaccionar a tiempo ante el riesgo. <a href="#p9">Cap. 4</a></div>
+
+      <div class="nivel n3">Nivel 3<small>previene defectos conocidos</small></div>
+      <div class="celda">Comprobaciones obligatorias: el artefacto que no cumple no se construye. <a href="#p8">Cap. 3</a></div>
+      <div class="celda">Analizar las dependencias con el mismo rigor que el código propio. <a href="#p9">Cap. 4</a></div>
+    </div>
+    <figcaption><b>Figura 1.</b> Niveles de madurez de la práctica <em>Secure Build</em>. Elaboración propia a partir de OWASP (2020, p. 140).</figcaption>
+  </figure>
+</section>
+
+<!-- ═════════════════ 6. CAP 1 ═════════════════ -->
+<section class="pagina" id="p6" data-titulo="1 · Definir el build">
+  <p class="etiqueta">Capítulo 1</p>
+  <h2 class="titulo-pagina">Definir formalmente el proceso de compilación</h2>
+  <div class="texto pendiente" data-guia="Qué significa definir formalmente el build; build como código; sin secretos; herramientas mantenidas; huella del artefacto">
+    <p>[Texto del capítulo 1]</p>
+  </div>
+  <figure class="figura">
+    <svg class="diagrama" viewBox="0 0 720 150" role="img" aria-labelledby="f2t">
+      <title id="f2t">Fases del build definidas en el pom.xml</title>
+      <g font-family="JetBrains Mono" font-size="12" text-anchor="middle">
+        <rect x="4" y="40" width="96" height="70" rx="8" class="caja-cod"/>
+        <text x="52" y="70" class="t-claro">pom.xml</text>
+        <text x="52" y="88" class="t-tenue">la receta</text>
+        <g class="flecha"><path d="M104 75h22"/><path d="M120 69l8 6-8 6"/></g>
+        <rect x="132" y="40" width="96" height="70" rx="8" class="caja"/>
+        <text x="180" y="70">validate</text><text x="180" y="88" class="t-sub">reglas</text>
+        <g class="flecha"><path d="M232 75h22"/><path d="M248 69l8 6-8 6"/></g>
+        <rect x="260" y="40" width="96" height="70" rx="8" class="caja"/>
+        <text x="308" y="70">compile</text><text x="308" y="88" class="t-sub">+ test</text>
+        <g class="flecha"><path d="M360 75h22"/><path d="M376 69l8 6-8 6"/></g>
+        <rect x="388" y="40" width="96" height="70" rx="8" class="caja"/>
+        <text x="436" y="70">package</text><text x="436" y="88" class="t-sub">.jar + SBOM</text>
+        <g class="flecha"><path d="M488 75h22"/><path d="M504 69l8 6-8 6"/></g>
+        <rect x="516" y="40" width="96" height="70" rx="8" class="caja-alerta"/>
+        <text x="564" y="70">verify</text><text x="564" y="88" class="t-sub">SAST</text>
+        <g class="flecha"><path d="M616 75h22"/><path d="M632 69l8 6-8 6"/></g>
+        <rect x="644" y="40" width="72" height="70" rx="8" class="caja-ok"/>
+        <text x="680" y="70">SHA</text><text x="680" y="88" class="t-sub">256</text>
+        <text x="360" y="20" class="t-sub">mvn verify  ·  mismas entradas → mismo artefacto</text>
+        <text x="360" y="140" class="t-sub">versiones fijas · sin secretos en la definición · fecha de salida fija (build reproducible)</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 2.</b> El proceso de compilación del caso práctico, definido como código en un único archivo. Elaboración propia.</figcaption>
+  </figure>
+  <div class="lista-control">
+    <p class="lista-titulo">Lista de verificación · ¿Tu build está definido formalmente?</p>
+    <ul>
+      <li>Con la documentación se puede recrear el build desde cero.</li>
+      <li>La definición está actualizada y en un lugar accesible (el repositorio).</li>
+      <li>Cada build genera una huella (<i>checksum</i>) del artefacto para verificarlo después.</li>
+      <li>Las herramientas del build están mantenidas, parchadas y configuradas de forma segura.</li>
+    </ul>
+    <p class="lista-fuente">Adaptado de OWASP (2020, p. 143).</p>
+  </div>
+</section>
+
+<!-- ═════════════════ 7. CAP 2 ═════════════════ -->
+<section class="pagina" id="p7" data-titulo="2 · Automatizar y asegurar">
+  <p class="etiqueta">Capítulo 2</p>
+  <h2 class="titulo-pagina">Automatizar el build y asegurar las herramientas</h2>
+  <div class="texto pendiente" data-guia="Pregunta orientadora 1: ¿por qué automatizar y asegurar las herramientas? Error humano; el pipeline como superficie de ataque (SolarWinds)">
+    <p>[Texto del capítulo 2]</p>
+  </div>
+  <div class="tarjetas">
+    <article class="tarjeta">
+      <h3>Fijar por hash</h3>
+      <p>Cada herramienta del pipeline se referencia por el hash de su versión, no por una etiqueta que alguien podría mover.</p>
+      <pre><code>uses: actions/checkout@3d3c42e5… # v7.0.1</code></pre>
+    </article>
+    <article class="tarjeta">
+      <h3>Permisos mínimos</h3>
+      <p>El token del pipeline solo puede leer. Únicamente la etapa que firma recibe permisos adicionales.</p>
+      <pre><code>permissions:
+  contents: read</code></pre>
+    </article>
+    <article class="tarjeta">
+      <h3>Agentes efímeros</h3>
+      <p>Cada ejecución corre en una máquina nueva que se destruye al terminar: no quedan secretos ni estado entre builds.</p>
+      <pre><code>runs-on: ubuntu-24.04</code></pre>
+    </article>
+    <article class="tarjeta">
+      <h3>Firma sin llaves</h3>
+      <p>La procedencia del artefacto se firma con un certificado de corta vida emitido tras autenticarse, sin custodiar llaves permanentes.</p>
+      <pre><code>id-token: write
+attestations: write</code></pre>
+    </article>
+  </div>
+  <p class="pie-figura"><b>Figura 3.</b> Cuatro prácticas para asegurar la cadena de herramientas, aplicadas en <code>.github/workflows/build-seguro.yml</code>. Elaboración propia.</p>
+</section>
+
+<!-- ═════════════════ 8. CAP 3 ═════════════════ -->
+<section class="pagina" id="p8" data-titulo="3 · Compuertas obligatorias">
+  <p class="etiqueta">Capítulo 3</p>
+  <h2 class="titulo-pagina">Comprobaciones obligatorias que detienen el build</h2>
+  <div class="texto pendiente" data-guia="Pregunta orientadora 2: impacto de que el build falle si no cumple. Umbral de severidad, advertencias, excepciones aprobadas y registradas">
+    <p>[Texto del capítulo 3]</p>
+  </div>
+  <figure class="figura">
+    <svg class="diagrama" viewBox="0 0 720 230" role="img" aria-labelledby="f4t">
+      <title id="f4t">Compuertas del pipeline: el artefacto solo se publica si pasa todas</title>
+      <g font-family="JetBrains Mono" font-size="12" text-anchor="middle">
+        <rect x="4" y="80" width="90" height="60" rx="8" class="caja-cod"/>
+        <text x="49" y="106" class="t-claro">commit</text><text x="49" y="124" class="t-tenue">push / PR</text>
+        <g class="flecha"><path d="M98 110h20"/><path d="M112 104l8 6-8 6"/></g>
+
+        <rect x="124" y="80" width="100" height="60" rx="8" class="caja"/>
+        <text x="174" y="106">1 · Secretos</text><text x="174" y="124" class="t-sub">Gitleaks</text>
+        <g class="flecha"><path d="M228 110h20"/><path d="M242 104l8 6-8 6"/></g>
+
+        <rect x="254" y="20" width="120" height="60" rx="8" class="caja"/>
+        <text x="314" y="46">2 · SAST</text><text x="314" y="64" class="t-sub">SpotBugs+FindSecBugs</text>
+        <rect x="254" y="140" width="120" height="60" rx="8" class="caja"/>
+        <text x="314" y="166">3 · SCA</text><text x="314" y="184" class="t-sub">OSV-Scanner</text>
+        <g class="flecha"><path d="M250 110 L250 50 L254 50"/><path d="M250 110 L250 170 L254 170"/></g>
+
+        <g class="flecha"><path d="M378 50h20"/><path d="M392 44l8 6-8 6"/></g>
+        <rect x="404" y="20" width="110" height="60" rx="8" class="caja"/>
+        <text x="459" y="46">4 · DAST</text><text x="459" y="64" class="t-sub">OWASP ZAP</text>
+
+        <g class="flecha"><path d="M518 50 H560 V94"/><path d="M554 88l6 8 6-8"/><path d="M378 170 H508 V111 H524"/><path d="M518 105l8 6-8 6"/></g>
+        <rect x="530" y="98" width="60" height="26" rx="13" class="caja-alerta"/>
+        <text x="560" y="115" font-size="11">¿todo ✓?</text>
+
+        <g class="flecha-ok"><path d="M594 111h24"/><path d="M612 105l8 6-8 6"/></g>
+        <rect x="624" y="80" width="92" height="60" rx="8" class="caja-ok"/>
+        <text x="670" y="102">5 · Publicar</text><text x="670" y="118" class="t-sub">SHA-256</text><text x="670" y="132" class="t-sub">+ procedencia</text>
+
+        <g class="flecha-mal"><path d="M560 128 V200"/><path d="M554 194l6 8 6-8"/></g>
+        <text x="560" y="222" class="t-mal">✗ no se crea el artefacto</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 4.</b> Compuertas del pipeline del caso práctico. Si cualquiera falla, la etapa de publicación ni siquiera se ejecuta. Elaboración propia.</figcaption>
+  </figure>
+</section>
+
+<!-- ═════════════════ 9. CAP 4 ═════════════════ -->
+<section class="pagina" id="p9" data-titulo="4 · Dependencias">
+  <p class="etiqueta">Capítulo 4</p>
+  <h2 class="titulo-pagina">Evaluar las dependencias</h2>
+  <div class="texto pendiente" data-guia="Las dependencias son código de terceros; SBOM; qué revisar de cada dependencia; A9 de Ortega; Log4Shell; reaccionar como si fuera un defecto propio">
+    <p>[Texto del capítulo 4]</p>
+  </div>
+  <div class="dos-col">
+    <figure class="figura">
+      <svg class="diagrama" viewBox="0 0 340 250" role="img" aria-labelledby="f5t">
+        <title id="f5t">Árbol de dependencias con una vulnerable</title>
+        <g font-family="JetBrains Mono" font-size="11" text-anchor="middle">
+          <rect x="110" y="6" width="120" height="34" rx="6" class="caja-cod"/>
+          <text x="170" y="27" class="t-claro">tu aplicación</text>
+          <g class="linea"><path d="M170 40 V60 M70 60 H270 M70 60 V76 M170 60 V76 M270 60 V76"/></g>
+          <rect x="20" y="76" width="100" height="30" rx="6" class="caja"/><text x="70" y="95">web-framework</text>
+          <rect x="120" y="76" width="100" height="30" rx="6" class="caja"/><text x="170" y="95">json-parser</text>
+          <rect x="220" y="76" width="100" height="30" rx="6" class="caja"/><text x="270" y="95">logging-api</text>
+          <g class="linea"><path d="M70 106 V126 M30 126 H110 M30 126 V140 M110 126 V140 M270 106 V140"/></g>
+          <rect x="0" y="140" width="62" height="28" rx="6" class="caja"/><text x="31" y="158">http</text>
+          <rect x="80" y="140" width="62" height="28" rx="6" class="caja"/><text x="111" y="158">utils</text>
+          <rect x="220" y="140" width="100" height="28" rx="6" class="caja-mal"/><text x="270" y="158" fill="#fff">log4j-core 2.14.1</text>
+          <text x="270" y="186" class="t-mal">CVE-2021-44228</text>
+          <text x="170" y="222" class="t-sub">dependencias directas (fila 2) y transitivas (fila 3):</text>
+          <text x="170" y="238" class="t-sub">la mayor parte del artefacto no la escribiste tú</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 5.</b> Una vulnerabilidad puede llegar por una dependencia transitiva que nadie agregó de forma explícita. Elaboración propia.</figcaption>
+    </figure>
+    <div class="lista-control">
+      <p class="lista-titulo">De cada dependencia, registra y revisa:</p>
+      <ul>
+        <li>Dónde se usa y en qué versión.</li>
+        <li>Su licencia.</li>
+        <li>De dónde viene (repositorio, autor).</li>
+        <li>Si sigue mantenida y con soporte.</li>
+        <li>Si tiene vulnerabilidades conocidas.</li>
+        <li>Si de verdad hace falta incluirla.</li>
+      </ul>
+      <p class="lista-fuente">Adaptado de OWASP (2020, pp. 149-153).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ 10. CAP 5 ═════════════════ -->
+<section class="pagina" id="p10" data-titulo="5 · Caso práctico">
+  <p class="etiqueta">Capítulo 5</p>
+  <h2 class="titulo-pagina">Caso práctico: el pipeline en acción</h2>
+  <div class="texto pendiente" data-guia="Qué es la app (consulta de radicados, Java 21, sin dependencias, validación por lista blanca — Ortega p. 82) y qué demuestra cada rama">
+    <p>[Texto del capítulo 5]</p>
+  </div>
+  <table class="tabla">
+    <thead><tr><th>Rama</th><th>Cambio introducido</th><th>Compuerta que lo detiene</th><th>Resultado</th></tr></thead>
+    <tbody>
+      <tr><td><code>main</code></td><td>Versión segura</td><td>—</td><td class="ok">✓ artefacto publicado</td></tr>
+      <tr><td><code>demo/log4shell</code></td><td>Agrega <code>log4j-core 2.14.1</code></td><td>3 · SCA (OSV-Scanner)</td><td class="mal">✗ build detenido</td></tr>
+      <tr><td><code>demo/hash-debil</code></td><td>Usa MD5 y <code>Random</code> para tokens</td><td>2 · SAST (FindSecBugs)</td><td class="mal">✗ build detenido</td></tr>
+      <tr><td><code>demo/sin-cabeceras</code></td><td>Quita las cabeceras de seguridad</td><td>4 · DAST (OWASP ZAP)</td><td class="mal">✗ build detenido</td></tr>
+    </tbody>
+  </table>
+  <div class="capturas">
+    <figure class="figura captura"><div class="captura-hueco">Captura: ejecución exitosa en <code>main</code></div><figcaption><b>Figura 6.</b> Pipeline exitoso. Captura propia.</figcaption></figure>
+    <figure class="figura captura"><div class="captura-hueco">Captura: ejecución fallida en <code>demo/log4shell</code></div><figcaption><b>Figura 7.</b> Pipeline detenido por una dependencia vulnerable. Captura propia.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ═════════════════ 11. CAP 6 ═════════════════ -->
+<section class="pagina" id="p11" data-titulo="6 · SAST y DAST">
+  <p class="etiqueta">Capítulo 6</p>
+  <h2 class="titulo-pagina">Análisis estático y dinámico: dos miradas complementarias</h2>
+  <div class="texto pendiente" data-guia="No compiten, se complementan; cuándo actúa cada uno; ZAP según Ortega p. 89; ASVS como lista de verificación (p. 94)">
+    <p>[Texto del capítulo 6]</p>
+  </div>
+  <table class="tabla comparativa">
+    <thead><tr><th></th><th>Estático (SAST)</th><th>Dinámico (DAST)</th></tr></thead>
+    <tbody>
+      <tr><th>Qué analiza</th><td>Código fuente o compilado, sin ejecutarlo</td><td>La aplicación en ejecución, desde afuera</td></tr>
+      <tr><th>Cuándo</th><td>En cada cambio, durante el build</td><td>Con la aplicación desplegada en un entorno de prueba</td></tr>
+      <tr><th>Encuentra</th><td>Patrones inseguros: criptografía débil, inyecciones, aleatorios predecibles</td><td>Configuración insegura, cabeceras ausentes, respuestas que exponen información</td></tr>
+      <tr><th>Herramienta en el caso</th><td>SpotBugs + Find Security Bugs</td><td>OWASP ZAP (escaneo <i>baseline</i>)</td></tr>
+      <tr><th>Limitación</th><td>Falsos positivos; no ve la configuración del entorno</td><td>Solo ve lo que puede alcanzar; llega más tarde en el ciclo</td></tr>
+    </tbody>
+  </table>
+  <p class="pie-figura"><b>Tabla 2.</b> Comparación entre análisis estático y dinámico. Elaboración propia.</p>
+</section>
+
+<!-- ═════════════════ 12. CONCLUSIONES ═════════════════ -->
+<section class="pagina" id="p12" data-titulo="Conclusiones">
+  <h2 class="titulo-pagina">Conclusiones</h2>
+  <div class="texto pendiente" data-guia="Síntesis de los elementos clave + tu postura personal">
+    <p>[Texto de las conclusiones]</p>
+  </div>
+</section>
+
+<!-- ═════════════════ 13. REFERENCIAS ═════════════════ -->
+<section class="pagina" id="p13" data-titulo="Referencias">
+  <h2 class="titulo-pagina">Referencias</h2>
+  <ul class="referencias">
+    <li><b>Ortega Candel, J. M. (2018).</b> Programación segura en aplicaciones de comercio electrónico. En <i>Seguridad en aplicaciones Web Java</i> (pp. 61-94). RA-MA Editorial. https://elibro.net/es/ereader/uniminuto/106511</li>
+    <li><b>OWASP. (2020).</b> <i>Software Assurance Maturity Model (SAMM) v2.0</i>. OWASP Foundation. https://owaspsamm.org/model/</li>
+  </ul>
+</section>
+
+</main>
+
+<nav class="puntos" id="puntos" aria-label="Ir a página"></nav>
+
+<script src="cartilla.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Mantener actualizadas las herramientas del build y las dependencias (SAMM: herramientas parchadas)
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /app
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

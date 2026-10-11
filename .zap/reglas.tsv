@@ -1,0 +1,3 @@
+10038	FAIL	(Content Security Policy no definida)
+10020	FAIL	(Protección anti-clickjacking ausente)
+10021	FAIL	(X-Content-Type-Options ausente)

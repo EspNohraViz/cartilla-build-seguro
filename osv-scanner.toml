@@ -1,0 +1,7 @@
+# Excepciones aprobadas a la política de dependencias.
+# Toda excepción debe tener una justificación y una fecha de revisión (SAMM, Secure Build, nivel 3).
+# Ejemplo:
+# [[IgnoredVulns]]
+# id = "GHSA-xxxx-xxxx-xxxx"
+# ignoreUntil = 2026-12-31
+# reason = "Falso positivo: la función vulnerable no se usa. Aprobado por: líder técnico."
