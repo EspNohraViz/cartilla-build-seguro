@@ -249,3 +249,4 @@ pre code { background: none; padding: 0; color: inherit; }
 /* capturas reales */
 .captura-grande img, .captura img { width: 100%; height: auto; display: block; border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 6px 18px -10px #0005; }
 .caso-intro { background: #fff8e6; border-left: 6px solid var(--acento); border-radius: 8px; padding: 16px 20px 2px; }
+.declaracion-ia { margin-top: 30px; background: #f4f6fb; border: 1px solid var(--linea); border-left: 6px solid var(--azul); border-radius: 8px; padding: 16px 20px 4px; font-size: 15px; }

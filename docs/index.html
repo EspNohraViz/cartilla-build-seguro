@@ -407,8 +407,12 @@ attestations: write</code></pre>
 <!-- ═════════════════ 12. CONCLUSIONES ═════════════════ -->
 <section class="pagina" id="p12" data-titulo="Conclusiones">
   <h2 class="titulo-pagina">Conclusiones</h2>
-  <div class="texto pendiente" data-guia="Síntesis de los elementos clave + tu postura personal">
-    <p>[Texto de las conclusiones]</p>
+  <div class="texto">
+    <p>La seguridad del software ya no se resuelve solo en el código. A lo largo de esta cartilla se mostró que el proceso de compilación y las dependencias son, hoy, una de las principales puertas de entrada de los ataques, y que la práctica <em>Secure Build</em> de OWASP SAMM ofrece un camino gradual para cerrarlas, primero definiendo el build de forma formal, luego automatizándolo y protegiendo sus herramientas, y finalmente haciendo que las comprobaciones de seguridad sean obligatorias.</p>
+    <p>Frente a la primera pregunta orientadora, automatizar el build elimina los errores humanos y garantiza que lo que llega a producción es exactamente lo que se revisó, pero también convierte al pipeline en un sistema crítico que debe protegerse con el mismo cuidado que la aplicación. Frente a la segunda, definir comprobaciones obligatorias que hagan fallar el build cambia por completo el papel de la seguridad, porque deja de ser un reporte que se puede ignorar y se convierte en una condición para que el artefacto exista. El caso práctico lo demostró desde la primera ejecución, cuando una sola advertencia bastó para que el artefacto no se publicara.</p>
+    <p>También quedó claro que las dependencias merecen el mismo rigor que el código propio, y que el análisis estático y el dinámico se necesitan mutuamente, porque cada uno encuentra problemas que el otro no puede ver.</p>
+    <p>Debo ser sincera, me sorprendió todo lo que se puede validar de manera automática. En los proyectos en los que trabajo todavía desplegamos el archivo WAR de forma manual, y ver un pipeline que revisa librerías, componentes, configuración y hasta el manejo de la caché me mostró la distancia que existe entre lo que hacemos y lo que ya es posible. Lo que más me impactó fue el caso de Log4j, porque uno de los proyectos en los que participo usa esa librería y estoy segura de que nadie ha revisado si la versión que tiene es vulnerable. En otro de mis trabajos, la migración hacia una arquitectura desacoplada sobre OpenShift está proyectada en el plan estratégico desde hace dos años, y el módulo de seguridad ni siquiera ha sido aprobado.</p>
+    <p>Mi planteamiento es que la seguridad en el build no debería esperar a las grandes migraciones. Muchas de estas prácticas no dependen de cambiar la infraestructura y pueden empezar hoy, en cualquier proyecto Java Maven, con algo tan sencillo como generar la lista de dependencias y escanearla contra una base de vulnerabilidades conocidas. Como dijo el profesor en la clase, el código se revisa, pero el build se demuestra, y creo que ese es el cambio de mentalidad que todavía nos falta dar.</p>
   </div>
 </section>
 
@@ -416,10 +420,15 @@ attestations: write</code></pre>
 <section class="pagina" id="p13" data-titulo="Referencias">
   <h2 class="titulo-pagina">Referencias</h2>
   <ul class="referencias">
+    <li><b>Anthropic. (2026).</b> <i>Claude</i> (versión Opus 5.5) [Modelo de lenguaje de gran tamaño]. https://claude.ai</li>
     <li><b>Ortega Candel, J. M. (2018).</b> Programación segura en aplicaciones de comercio electrónico. En <i>Seguridad en aplicaciones Web Java</i> (pp. 61-94). RA-MA Editorial. https://elibro.net/es/ereader/uniminuto/106511</li>
     <li><b>OWASP. (2020).</b> <i>Software Assurance Maturity Model (SAMM) v2.0</i>. OWASP Foundation. https://owaspsamm.org/model/</li>
     <li><b>OWASP. (2025).</b> <i>A03:2025 Software supply chain failures</i>. En <i>OWASP Top 10:2025</i>. OWASP Foundation. https://top10.owasp.org/2025/A03_2025-Software_Supply_Chain_Failures/</li>
   </ul>
+  <aside class="declaracion-ia">
+    <p class="lista-titulo">Declaración de uso de inteligencia artificial</p>
+    <p>En la elaboración de esta cartilla se utilizó Claude (Anthropic, 2026) como herramienta de apoyo. La IA se usó para proponer la estructura de la cartilla, redactar borradores de los textos a partir de las ideas, la experiencia y las indicaciones de la autora, desarrollar el código del caso práctico y el pipeline, y diseñar las ilustraciones y la maqueta de la cartilla. La autora definió el enfoque del trabajo, revisó y ajustó cada texto, aportó su experiencia profesional, ejecutó el pipeline en su propio repositorio y validó que las citas correspondieran a las fuentes consultadas.</p>
+  </aside>
 </section>
 
 </main>
