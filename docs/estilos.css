@@ -37,9 +37,11 @@ body {
   border-bottom: 1px solid #ffffff14;
 }
 .marca {
-  font-family: var(--sans); font-weight: 900; letter-spacing: .08em;
-  color: #fff; text-decoration: none; font-size: 15px;
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-weight: 900; letter-spacing: .14em;
+  color: #fff; text-decoration: none; font-size: 15px; white-space: pre;
 }
+.marca .escudo { width: 22px; height: 22px; color: #fff; flex: none; }
 .marca span { color: var(--acento); }
 .barra-nav { display: flex; align-items: center; gap: 12px; font-family: var(--mono); color: #c9d3e8; font-size: 13px; }
 .barra-nav button {
@@ -128,7 +130,7 @@ pre code { background: none; padding: 0; color: inherit; }
 
 /* ───────── legal ───────── */
 .legal { display: none; }
-.legal.activa { display: flex; align-items: flex-end; }
+.legal.activa { display: block; }
 .legal-bloque { font-size: 14px; color: var(--tinta-2); max-width: 520px; }
 .legal-titulo { font-family: var(--sans); font-weight: 800; color: var(--tinta); font-size: 18px; }
 .legal dl { display: grid; grid-template-columns: 120px 1fr; gap: 6px 14px; margin: 22px 0; }
@@ -250,3 +252,48 @@ pre code { background: none; padding: 0; color: inherit; }
 .captura-grande img, .captura img { width: 100%; height: auto; display: block; border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 6px 18px -10px #0005; }
 .caso-intro { background: #fff8e6; border-left: 6px solid var(--acento); border-radius: 8px; padding: 16px 20px 2px; }
 .declaracion-ia { margin-top: 30px; background: #f4f6fb; border: 1px solid var(--linea); border-left: 6px solid var(--azul); border-radius: 8px; padding: 16px 20px 4px; font-size: 15px; }
+
+/* ───────── página legal (ficha) ───────── */
+.legal-h { font-family: var(--sans); font-weight: 800; font-size: 26px; line-height: 1.2; margin: 6px 0 14px; }
+.legal-desc { color: var(--tinta-2); font-size: 17px; max-width: 40em; margin-bottom: 26px; }
+.ficha { background: #fff; border: 1px solid var(--linea); border-radius: 10px; padding: 18px 24px; max-width: 640px; }
+.ficha-fila { display: grid; grid-template-columns: 170px 1fr; gap: 16px; padding: 9px 0; align-items: baseline; }
+.ficha-k { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); }
+.ficha-v { font-weight: 600; color: var(--tinta); }
+.ficha-v a { color: var(--azul); }
+.legal .legal-nota { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--linea); font-size: 14px; color: var(--tinta-2); max-width: none; }
+
+/* ───────── introducción por bloques ───────── */
+.intro .entrada { font-size: 18px; }
+.intro .frase { margin: 26px 0 30px; }
+.bloque { margin-bottom: 22px; padding-left: 18px; border-left: 3px solid var(--linea); }
+.bloque-k { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); margin-bottom: 4px; }
+
+/* ───────── efecto de pasar la hoja ───────── */
+#libro { position: relative; perspective: 2200px; }
+.pagina.hoja { position: absolute; top: 0; left: 16px; right: 16px; z-index: 3; display: block; transform-origin: left center; backface-visibility: hidden; animation: none; }
+.portada.hoja { display: flex; }
+.pagina.hoja::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(to left, rgba(11,19,36,.35), rgba(11,19,36,0) 55%); opacity: 0; z-index: 5; }
+.pagina.hoja-adelante { animation: pasar-adelante .75s cubic-bezier(.45,.05,.35,1) forwards; }
+.pagina.hoja-adelante::before { animation: sombra .75s ease forwards; }
+.pagina.hoja-atras { animation: pasar-atras .75s cubic-bezier(.45,.05,.35,1) forwards; }
+.pagina.hoja-atras::before { animation: sombra-inv .75s ease forwards; }
+.pagina.sin-entrada { animation: none; }
+@keyframes pasar-adelante {
+  0%   { transform: rotateY(0); box-shadow: 0 30px 60px -20px #000a; }
+  60%  { box-shadow: -30px 30px 60px -10px #000c; }
+  100% { transform: rotateY(-100deg); opacity: .2; }
+}
+@keyframes pasar-atras {
+  0%   { transform: rotateY(-100deg); opacity: .2; }
+  40%  { box-shadow: -30px 30px 60px -10px #000c; }
+  100% { transform: rotateY(0); opacity: 1; box-shadow: 0 30px 60px -20px #000a; }
+}
+@keyframes sombra { to { opacity: 1; } }
+@keyframes sombra-inv { from { opacity: 1; } to { opacity: 0; } }
+@media (max-width: 700px) {
+  .ficha-fila { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagina.hoja-adelante, .pagina.hoja-atras { animation-duration: .01s; }
+}
