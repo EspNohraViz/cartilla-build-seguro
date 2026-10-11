@@ -4,7 +4,9 @@
   const sig = document.getElementById('sig');
   const contador = document.getElementById('contador');
   const puntos = document.getElementById('puntos');
-  let actual = 0;
+  const DURACION = 760;
+  let actual = -1;
+  let animando = false;
 
   paginas.forEach((p, i) => {
     p.dataset.num = i + 1;
@@ -16,16 +18,57 @@
   });
   const botones = Array.from(puntos.children);
 
+  function marcar(i, desdeHash) {
+    botones.forEach((b, j) => b.classList.toggle('activo', j === i));
+    contador.textContent = (i + 1) + ' / ' + paginas.length;
+    ant.disabled = i === 0;
+    sig.disabled = i === paginas.length - 1;
+    document.title = (paginas[i].dataset.titulo || '') + ' · Build seguro';
+    if (!desdeHash) history.replaceState(null, '', '#' + paginas[i].id);
+  }
+
+  function limpiar(p) {
+    p.classList.remove('hoja', 'hoja-adelante', 'hoja-atras');
+  }
+
   function ir(i, desdeHash) {
-    actual = Math.max(0, Math.min(paginas.length - 1, i));
-    paginas.forEach((p, j) => p.classList.toggle('activa', j === actual));
-    botones.forEach((b, j) => b.classList.toggle('activo', j === actual));
-    contador.textContent = (actual + 1) + ' / ' + paginas.length;
-    ant.disabled = actual === 0;
-    sig.disabled = actual === paginas.length - 1;
-    document.title = (paginas[actual].dataset.titulo || '') + ' · Build seguro';
-    if (!desdeHash) history.replaceState(null, '', '#' + paginas[actual].id);
+    i = Math.max(0, Math.min(paginas.length - 1, i));
+    if (i === actual || animando) return;
+    const anterior = actual;
+    actual = i;
+    marcar(i, desdeHash);
+
+    // primera carga: sin efecto
+    if (anterior < 0) {
+      paginas[i].classList.add('activa');
+      return;
+    }
+
+    const vieja = paginas[anterior];
+    const nueva = paginas[i];
+    animando = true;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (i > anterior) {
+      // hacia adelante: la hoja actual se levanta y deja ver la siguiente
+      nueva.classList.add('activa', 'sin-entrada');
+      vieja.classList.add('hoja', 'hoja-adelante');
+      setTimeout(() => {
+        vieja.classList.remove('activa');
+        limpiar(vieja);
+        nueva.classList.remove('sin-entrada');
+        animando = false;
+      }, DURACION);
+    } else {
+      // hacia atrás: la hoja anterior vuelve a caer sobre la actual
+      vieja.classList.add('sin-entrada');
+      nueva.classList.add('activa', 'hoja', 'hoja-atras');
+      setTimeout(() => {
+        vieja.classList.remove('activa', 'sin-entrada');
+        limpiar(nueva);
+        animando = false;
+      }, DURACION);
+    }
   }
 
   function desdeHash() {
