@@ -1,3 +1,7 @@
-10038	FAIL	(Content Security Policy no definida)
-10020	FAIL	(Protección anti-clickjacking ausente)
+# Reglas de OWASP ZAP. Formato: id<TAB>accion<TAB>(justificacion)
+# Excepcion aprobada: las respuestas usan Cache-Control: no-store a proposito,
+# porque contienen datos de radicados que no deben quedar en cache.
+10049	IGNORE	(Non-Storable Content: no-store es intencional)
+10038	FAIL	(CSP no definida)
+10020	FAIL	(Anti-clickjacking ausente)
 10021	FAIL	(X-Content-Type-Options ausente)
