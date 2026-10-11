@@ -7,7 +7,7 @@
 <meta name="description" content="Cartilla digital: recomendaciones de desarrollo seguro centradas en el proceso de compilación y las dependencias del software.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
   <a class="marca" href="#p1"><svg class="escudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.4v6.1c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4L12 2.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>BUILD <span>SEGURO</span></a>
   <nav class="barra-nav" aria-label="Navegación de páginas">
     <button id="ant" aria-label="Página anterior">&larr;</button>
-    <span id="contador" aria-live="polite">1 / 13</span>
+    <span id="contador" aria-live="polite">1 / 14</span>
     <button id="sig" aria-label="Página siguiente">&rarr;</button>
   </nav>
 </header>
@@ -119,40 +119,55 @@
   <h2 class="titulo-pagina">Contenido</h2>
   <ol class="indice">
     <li><a href="#p4"><span>Introducción</span><i>4</i></a></li>
-    <li><a href="#p5"><span>El mapa: la práctica <em>Secure Build</em> de OWASP SAMM</span><i>5</i></a></li>
+    <li><a href="#p5"><span>El mapa de la práctica <em>Secure Build</em></span><i>5</i></a></li>
     <li class="cap"><a href="#p6"><b>1</b><span>Definir formalmente el proceso de compilación</span><i>6</i></a></li>
     <li class="cap"><a href="#p7"><b>2</b><span>Automatizar el build y asegurar las herramientas</span><i>7</i></a></li>
     <li class="cap"><a href="#p8"><b>3</b><span>Comprobaciones obligatorias que detienen el build</span><i>8</i></a></li>
     <li class="cap"><a href="#p9"><b>4</b><span>Evaluar las dependencias</span><i>9</i></a></li>
-    <li class="cap"><a href="#p10"><b>5</b><span>Caso práctico: el pipeline en acción</span><i>10</i></a></li>
-    <li class="cap"><a href="#p11"><b>6</b><span>Análisis estático y dinámico: dos miradas complementarias</span><i>11</i></a></li>
-    <li><a href="#p12"><span>Conclusiones</span><i>12</i></a></li>
-    <li><a href="#p13"><span>Referencias</span><i>13</i></a></li>
+    <li class="cap"><a href="#p10"><b>5</b><span>Caso práctico, el pipeline en acción</span><i>10</i></a></li>
+    <li class="cap"><a href="#p11"><b>6</b><span>Análisis estático y dinámico</span><i>11</i></a></li>
+    <li><a href="#p12"><span>Autodiagnóstico ¿Qué tan seguro es tu build?</span><i>12</i></a></li>
+    <li><a href="#p13"><span>Conclusiones</span><i>13</i></a></li>
+    <li><a href="#p14"><span>Referencias</span><i>14</i></a></li>
   </ol>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Toca cualquier tema para ir directo a su página.</p>
 </section>
 
 <!-- ═════════════════ 4. INTRODUCCIÓN ═════════════════ -->
 <section class="pagina" id="p4" data-titulo="Introducción">
   <p class="etiqueta">Marco de referencia</p>
   <h2 class="titulo-pagina">Introducción</h2>
-  <div class="texto intro">
-    <p>Durante años, la seguridad del software se ha medido casi exclusivamente por la calidad del código, es decir, que pase la revisión, que no tenga inyecciones y que valide bien las entradas. Eso sigue siendo necesario, pero ya no alcanza. Hoy buena parte del riesgo entra por otro lado, a través de las librerías de terceros que se incorporan sin revisarlas y del propio proceso que convierte el código fuente en el artefacto que llega a producción. En mis años de experiencia desarrollando y dando soporte a aplicaciones, he visto cómo una aplicación se vuelve obsoleta y cómo sus librerías van presentando fallas de seguridad que terminan volviendo vulnerables los sistemas. Ortega (2018) señala que desarrollar aplicaciones seguras, sobre todo cuando están expuestas a Internet, es la mejor defensa que tiene una organización frente a los ciberataques (p. 61). Esta cartilla parte de esa idea y la lleva un paso más allá, porque además de escribir código seguro, hay que construirlo de forma segura.</p>
-    <p><strong>Propósito de la cartilla:</strong> Ofrecer recomendaciones prácticas para asegurar el proceso de compilación y las dependencias del software, y mostrar cómo se aplican en un proyecto real.</p>
-    <p><strong>Público objetivo:</strong> Está dirigida a desarrolladores, líderes técnicos y equipos que mantienen aplicaciones en producción, en especial en entornos Java Maven, aunque los principios sirven para cualquier tecnología. También puede ser útil para estudiantes que empiezan a acercarse a las prácticas de DevSecOps.</p>
-    <p><strong>Contenido:</strong> La cartilla toma como eje la práctica <em>Secure Build</em> del modelo OWASP SAMM, que plantea construir el software de manera estandarizada y repetible, con componentes seguros, incluidas las dependencias de terceros (OWASP, 2020, p. 138). Primero se presenta el mapa de madurez de esta práctica. Luego, en cuatro capítulos, se explica cómo definir formalmente el proceso de compilación, cómo automatizarlo y proteger las herramientas que lo ejecutan, qué comprobaciones de seguridad deben ser obligatorias y cómo evaluar las dependencias. El quinto capítulo presenta el caso práctico, un pipeline en GitHub Actions que detiene el build cuando encuentra código inseguro, una librería vulnerable o una configuración débil. El sexto compara el análisis estático con el dinámico y, al final, se presentan las conclusiones.</p>
-    <blockquote class="frase">«El código se revisa, el build se demuestra».</blockquote>
-    <p><strong>Importancia y actualidad:</strong> La relevancia del tema la confirma la propia comunidad de seguridad. En el OWASP Top 10 de 2025, las fallas en la cadena de suministro de software ocupan el tercer lugar, fueron la categoría más votada como primera prioridad en la encuesta comunitaria y tienen la tasa de incidencia promedio más alta en los datos analizados (OWASP, 2025). Casos como Log4Shell, en 2021, demostraron que una sola librería de registro de eventos puede dejar expuestas miles de aplicaciones cuyos equipos nunca escribieron una línea de código vulnerable.</p>
+  <p class="entrada">Hoy buena parte del riesgo del software no entra por el código que escribimos, sino por las librerías de terceros y por el proceso que lo convierte en el artefacto que llega a producción. En mis años de experiencia desarrollando y dando soporte a aplicaciones, he visto cómo las librerías van presentando fallas de seguridad que terminan volviendo vulnerables los sistemas. Ortega (2018) recuerda que desarrollar aplicaciones seguras es la mejor defensa de una organización frente a los ciberataques (p. 61).</p>
+  <div class="tiles">
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg><p class="idea-k">Propósito</p><p>Ofrecer recomendaciones prácticas para asegurar el proceso de compilación y las dependencias, y mostrar cómo se aplican en un proyecto real.</p></div>
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><p class="idea-k">¿A quién va dirigida?</p><p>A desarrolladores, líderes técnicos y estudiantes, en especial de entornos Java Maven.</p></div>
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg><p class="idea-k">Contenido</p><p>El mapa de SAMM, cuatro capítulos de recomendaciones, un caso práctico con un pipeline real, la comparación entre SAST y DAST, un autodiagnóstico y las conclusiones.</p></div>
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><p class="idea-k">Importancia</p><p>Las fallas de la cadena de suministro ocupan el tercer lugar del OWASP Top 10 de 2025 y tienen la incidencia promedio más alta (OWASP, 2025).</p></div>
   </div>
+  <blockquote class="frase">«El código se revisa, el build se demuestra».</blockquote>
+  <div class="como-usar">
+    <p class="idea-k">Cómo usar esta cartilla</p>
+    <ul>
+      <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Pasa de hoja con las flechas, el teclado o deslizando el dedo.</li>
+      <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 12l3 3 5-6"/></svg>Toca las tarjetas de recomendaciones para voltearlas.</li>
+      <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Abre «Leer más» al final de cada capítulo para profundizar.</li>
+      <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>Al final, haz el autodiagnóstico de tu propio build.</li>
+    </ul>
+  </div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>Durante años, la seguridad del software se ha medido casi exclusivamente por la calidad del código, es decir, que pase la revisión, que no tenga inyecciones y que valide bien las entradas. Eso sigue siendo necesario, pero ya no alcanza. Hoy buena parte del riesgo entra por otro lado, a través de las librerías de terceros que se incorporan sin revisarlas y del propio proceso que convierte el código fuente en el artefacto que llega a producción. En mis años de experiencia desarrollando y dando soporte a aplicaciones, he visto cómo una aplicación se vuelve obsoleta y cómo sus librerías van presentando fallas de seguridad que terminan volviendo vulnerables los sistemas. Ortega (2018) señala que desarrollar aplicaciones seguras, sobre todo cuando están expuestas a Internet, es la mejor defensa que tiene una organización frente a los ciberataques (p. 61). Esta cartilla parte de esa idea y la lleva un paso más allá, porque además de escribir código seguro, hay que construirlo de forma segura.</p>
+    <p>El propósito de la cartilla es ofrecer recomendaciones prácticas para asegurar el proceso de compilación y las dependencias del software, y mostrar cómo se aplican en un proyecto real.</p>
+    <p>Está dirigida a desarrolladores, líderes técnicos y equipos que mantienen aplicaciones en producción, en especial en entornos Java Maven, aunque los principios sirven para cualquier tecnología. También puede ser útil para estudiantes que empiezan a acercarse a las prácticas de DevSecOps.</p>
+    <p>El contenido toma como eje la práctica <em>Secure Build</em> del modelo OWASP SAMM, que plantea construir el software de manera estandarizada y repetible, con componentes seguros, incluidas las dependencias de terceros (OWASP, 2020, p. 138). Primero se presenta el mapa de madurez de esta práctica. Luego, en cuatro capítulos, se explica cómo definir formalmente el proceso de compilación, cómo automatizarlo y proteger las herramientas que lo ejecutan, qué comprobaciones de seguridad deben ser obligatorias y cómo evaluar las dependencias. El quinto capítulo presenta el caso práctico, un pipeline en GitHub Actions que detiene el build cuando encuentra código inseguro, una librería vulnerable o una configuración débil. El sexto compara el análisis estático con el dinámico y, al final, se presentan las conclusiones.</p>
+    <p>La relevancia del tema la confirma la propia comunidad de seguridad. En el OWASP Top 10 de 2025, las fallas en la cadena de suministro de software ocupan el tercer lugar, fueron la categoría más votada como primera prioridad en la encuesta comunitaria y tienen la tasa de incidencia promedio más alta en los datos analizados (OWASP, 2025). Casos como Log4Shell, en 2021, demostraron que una sola librería de registro de eventos puede dejar expuestas miles de aplicaciones cuyos equipos nunca escribieron una línea de código vulnerable.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 5. MAPA SAMM ═════════════════ -->
-<section class="pagina" id="p5" data-titulo="El mapa: Secure Build">
+<section class="pagina" id="p5" data-titulo="El mapa de Secure Build">
   <p class="etiqueta">Antes de empezar</p>
-  <h2 class="titulo-pagina">El mapa: la práctica <em>Secure Build</em></h2>
-  <div class="texto">
-    <p>OWASP SAMM (<em>Software Assurance Maturity Model</em>) es un modelo abierto que ayuda a las organizaciones a analizar y mejorar la seguridad de su software de manera gradual. Está compuesto por quince prácticas de seguridad agrupadas en cinco funciones de negocio, y cada práctica tiene actividades organizadas en tres niveles de madurez (OWASP, 2020, p. 13). El modelo no exige llegar al nivel máximo en todo, sino que cada organización define la meta que mejor se ajusta a su realidad (OWASP, 2020, p. 12).</p>
-    <p>Dentro de la función de Implementación se encuentra la práctica <em>Secure Build</em>, que se enfoca en lograr un proceso de compilación consistente y repetible, y en tener en cuenta la seguridad de las dependencias de la aplicación (OWASP, 2020, p. 136). Esta práctica se divide en dos líneas de trabajo. La primera busca eliminar cualquier subjetividad del proceso de compilación por medio de la automatización, y la segunda reconoce el peso que tienen hoy las librerías externas y busca identificarlas y hacer seguimiento a su estado de seguridad (OWASP, 2020, p. 138). La figura 1 resume lo que se espera en cada nivel y sirve como mapa para los capítulos que siguen.</p>
-  </div>
+  <h2 class="titulo-pagina">El mapa de la práctica <em>Secure Build</em></h2>
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>OWASP SAMM es un modelo abierto para mejorar la seguridad del software de forma gradual, con quince prácticas y tres niveles de madurez (OWASP, 2020, p. 13). Esta cartilla se enfoca en la práctica <em>Secure Build</em>, que busca un build consistente y repetible y dependencias seguras (OWASP, 2020, p. 136).</p></div>
   <figure class="figura">
     <div class="escalera">
       <div class="escalera-cab"></div>
@@ -173,20 +188,18 @@
     </div>
     <figcaption><b>Figura 1.</b> Niveles de madurez de la práctica <em>Secure Build</em>. Elaboración propia a partir de OWASP (2020, p. 140).</figcaption>
   </figure>
-  <div class="texto caso-intro">
-    <p>Para que estas recomendaciones no se queden en la teoría, la cartilla las acompaña con un caso práctico. Se trata de un pequeño servicio web en Java Maven para consultar el estado de un radicado, publicado en un repositorio de GitHub junto con un pipeline de integración continua que lo compila, lo analiza y solo genera el artefacto final cuando pasa todas las comprobaciones de seguridad. En cada capítulo se muestra cómo se aplicó la recomendación en este proyecto, y en el capítulo 5 se presentan los resultados de ejecutar el pipeline.</p>
-  </div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>Cada recomendación se acompaña de un caso práctico, un servicio web Java Maven publicado en GitHub con un pipeline que solo genera el artefacto final si pasa todas las comprobaciones de seguridad.</p></div></div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>OWASP SAMM (<em>Software Assurance Maturity Model</em>) es un modelo abierto que ayuda a las organizaciones a analizar y mejorar la seguridad de su software de manera gradual. Está compuesto por quince prácticas de seguridad agrupadas en cinco funciones de negocio, y cada práctica tiene actividades organizadas en tres niveles de madurez (OWASP, 2020, p. 13). El modelo no exige llegar al nivel máximo en todo, sino que cada organización define la meta que mejor se ajusta a su realidad (OWASP, 2020, p. 12).</p>
+    <p>Dentro de la función de Implementación se encuentra la práctica <em>Secure Build</em>, que se enfoca en lograr un proceso de compilación consistente y repetible, y en tener en cuenta la seguridad de las dependencias de la aplicación (OWASP, 2020, p. 136). Esta práctica se divide en dos líneas de trabajo. La primera busca eliminar cualquier subjetividad del proceso de compilación por medio de la automatización, y la segunda reconoce el peso que tienen hoy las librerías externas y busca identificarlas y hacer seguimiento a su estado de seguridad (OWASP, 2020, p. 138). La figura 1 resume lo que se espera en cada nivel y sirve como mapa para los capítulos que siguen.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 6. CAP 1 ═════════════════ -->
 <section class="pagina" id="p6" data-titulo="1 · Definir el build">
   <p class="etiqueta">Capítulo 1</p>
   <h2 class="titulo-pagina">Definir formalmente el proceso de compilación</h2>
-  <div class="texto">
-    <p>Definir formalmente el proceso de compilación significa dejar de depender de la memoria de quien compila. SAMM propone descomponer el build en un conjunto de instrucciones claras, que pueda seguir una persona o una herramienta automatizada, y que describan el proceso completo de principio a fin para que cada ejecución produzca el mismo resultado (OWASP, 2020, p. 141). Esa definición debe estar en un lugar central y accesible, sin copias sueltas que se desactualicen, y nunca debe contener secretos, como contraseñas o llaves que se usen durante la compilación.</p>
-    <p>En un proyecto Java Maven esto se logra tratando el build como código. En el servicio de consulta de radicados que se usa como ejemplo, el archivo pom.xml es la receta completa, ya que declara la versión de Java, fija la versión de cada plugin, define las reglas que debe cumplir el propio build y encadena las fases de validación, compilación, pruebas, empaquetado y análisis (figura 2). Incluso la fecha de salida del artefacto está fija, de modo que dos compilaciones con las mismas entradas generan el mismo archivo byte a byte.</p>
-    <p>SAMM añade dos recomendaciones que suelen olvidarse. La primera es verificar que las herramientas de compilación sigan mantenidas por su fabricante y al día con los parches de seguridad, y la segunda es calcular para cada artefacto un valor que permita comprobar su integridad más adelante, como una firma o un hash (OWASP, 2020, p. 141). En el caso práctico, Dependabot revisa cada semana si hay versiones nuevas de las herramientas, y cada artefacto publicado va acompañado de su huella SHA-256. Ortega (2018) explica que cualquier cambio, por pequeño que sea, altera por completo la huella digital de un documento (p. 62), y esa es precisamente la propiedad que permite detectar si un artefacto fue modificado después de construirse.</p>
-  </div>
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>Definir el build es dejar de depender de la memoria de quien compila. SAMM propone describir el proceso completo, de principio a fin, para que cada ejecución produzca siempre el mismo resultado (OWASP, 2020, p. 141).</p></div>
   <figure class="figura">
     <svg class="diagrama" viewBox="0 0 720 150" role="img" aria-labelledby="f2t">
       <title id="f2t">Fases del build definidas en el pom.xml</title>
@@ -215,64 +228,49 @@
     </svg>
     <figcaption><b>Figura 2.</b> El proceso de compilación del caso práctico, definido como código en un único archivo. Elaboración propia.</figcaption>
   </figure>
-  <div class="lista-control">
-    <p class="lista-titulo">Lista de verificación · ¿Tu build está definido formalmente?</p>
-    <ul>
-      <li>Con la documentación se puede recrear el build desde cero.</li>
-      <li>La definición está actualizada y en un lugar accesible (el repositorio).</li>
-      <li>Cada build genera una huella (<i>checksum</i>) del artefacto para verificarlo después.</li>
-      <li>Las herramientas del build están mantenidas, parchadas y configuradas de forma segura.</li>
-    </ul>
-    <p class="lista-fuente">Adaptado de OWASP (2020, p. 143).</p>
+  <p class="seccion-k">Recomendaciones</p>
+  <div class="volteables">
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h6"/></svg><b>Escríbelo como código</b><small>Toca para ver</small></span><span class="cara reverso">Toda la receta del build vive en un archivo versionado, en Maven el pom.xml, y no en la cabeza de una persona.</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3z"/><path d="M12 13v8"/></svg><b>Fija las versiones</b><small>Toca para ver</small></span><span class="cara reverso">Versión exacta de Java, de cada plugin y de cada dependencia. Mismas entradas, mismo artefacto.</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg><b>Sin secretos en la receta</b><small>Toca para ver</small></span><span class="cara reverso">Contraseñas y llaves nunca se escriben en la definición del build. Se entregan de forma protegida al momento de compilar.</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/></svg><b>Huella de cada artefacto</b><small>Toca para ver</small></span><span class="cara reverso">Un hash SHA-256 permite comprobar después que nadie lo modificó, porque cualquier cambio altera la huella (Ortega, 2018, p. 62).</span></button>
   </div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>El pom.xml del servicio de radicados fija Java 21 y cada plugin, encadena compilación, pruebas, análisis y SBOM, y fija la fecha de salida para que el build sea reproducible. Dependabot vigila cada semana si hay versiones nuevas.</p></div></div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>Definir formalmente el proceso de compilación significa dejar de depender de la memoria de quien compila. SAMM propone descomponer el build en un conjunto de instrucciones claras, que pueda seguir una persona o una herramienta automatizada, y que describan el proceso completo de principio a fin para que cada ejecución produzca el mismo resultado (OWASP, 2020, p. 141). Esa definición debe estar en un lugar central y accesible, sin copias sueltas que se desactualicen, y nunca debe contener secretos, como contraseñas o llaves que se usen durante la compilación.</p>
+    <p>En un proyecto Java Maven esto se logra tratando el build como código. En el servicio de consulta de radicados que se usa como ejemplo, el archivo pom.xml es la receta completa, ya que declara la versión de Java, fija la versión de cada plugin, define las reglas que debe cumplir el propio build y encadena las fases de validación, compilación, pruebas, empaquetado y análisis (figura 2). Incluso la fecha de salida del artefacto está fija, de modo que dos compilaciones con las mismas entradas generan el mismo archivo byte a byte.</p>
+    <p>SAMM añade dos recomendaciones que suelen olvidarse. La primera es verificar que las herramientas de compilación sigan mantenidas por su fabricante y al día con los parches de seguridad, y la segunda es calcular para cada artefacto un valor que permita comprobar su integridad más adelante, como una firma o un hash (OWASP, 2020, p. 141). En el caso práctico, Dependabot revisa cada semana si hay versiones nuevas de las herramientas, y cada artefacto publicado va acompañado de su huella SHA-256. Ortega (2018) explica que cualquier cambio, por pequeño que sea, altera por completo la huella digital de un documento (p. 62), y esa es precisamente la propiedad que permite detectar si un artefacto fue modificado después de construirse.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 7. CAP 2 ═════════════════ -->
 <section class="pagina" id="p7" data-titulo="2 · Automatizar y asegurar">
   <p class="etiqueta">Capítulo 2</p>
   <h2 class="titulo-pagina">Automatizar el build y asegurar las herramientas</h2>
-  <div class="texto">
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>Automatizar el build elimina el error humano y garantiza que a producción llegue exactamente lo que se revisó (OWASP, 2020, p. 144). Pero el pipeline también es una superficie de ataque y debe protegerse como cualquier sistema en producción.</p></div>
+  <div class="caso-real"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><div><p class="idea-k">Caso real</p><p>En 2019, los atacantes de SolarWinds comprometieron al proveedor y, a través de una actualización que los clientes instalaron con confianza, llegaron a cerca de 18 000 organizaciones (OWASP, 2025).</p></div></div>
+  <p class="seccion-k">Recomendaciones</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Toca cada tarjeta para descubrir el porqué.</p>
+  <div class="volteables">
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 6 3 3H7l3-3z"/><path d="M12 13v8"/></svg><b>Fija las herramientas por hash</b><small>Toca para ver</small></span><span class="cara reverso">Cada acción del pipeline se referencia por el hash de su versión y no por una etiqueta que alguien podría mover.<code>actions/checkout@3d3c42e5…</code></span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><b>Permisos mínimos</b><small>Toca para ver</small></span><span class="cara reverso">El token del pipeline solo puede leer. Únicamente la etapa que firma recibe permisos adicionales.<code>contents: read</code></span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z"/></svg><b>Agentes efímeros</b><small>Toca para ver</small></span><span class="cara reverso">Cada ejecución corre en una máquina nueva que se destruye al terminar, sin secretos ni estado entre builds.<code>runs-on: ubuntu-24.04</code></span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg><b>Firma sin llaves</b><small>Toca para ver</small></span><span class="cara reverso">La procedencia del artefacto se firma con un certificado de corta vida, sin custodiar llaves permanentes.<code>id-token: write</code></span></button>
+  </div>
+  <p class="pie-figura"><b>Figura 3.</b> Cuatro prácticas para asegurar la cadena de herramientas, aplicadas en el pipeline del caso práctico. Elaboración propia.</p>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>El pipeline vive en el mismo repositorio como un archivo de GitHub Actions, de modo que cada cambio queda versionado y se puede revisar como el resto del código.</p></div></div>
+  <details class="leer-mas"><summary>Leer más</summary>
     <p>Un proceso de compilación que depende de pasos manuales es frágil. Basta con que alguien olvide un paso, use una versión distinta de una herramienta o compile desde su propio equipo para que el artefacto que llega a producción ya no corresponda con el código revisado. Por eso SAMM, en su nivel 2, recomienda automatizar el build para que pueda ejecutarse de manera consistente en cualquier momento y sin intervención humana, lo que reduce aún más la probabilidad de error (OWASP, 2020, p. 144). Además, la automatización permite aprovechar el pipeline para incorporar controles de seguridad, como el análisis estático, en cada ejecución (OWASP, 2020, p. 145).</p>
     <p>Sin embargo, automatizar tiene un costo que no siempre se ve. Cuanto más se confía en el pipeline, más importante es protegerlo, porque una herramienta de compilación expuesta podría permitir que un atacante altere el proceso e inserte código malicioso en el software (OWASP, 2020, p. 144). El caso de SolarWinds en 2019 es el ejemplo más conocido, ya que los atacantes comprometieron al proveedor y, a través de una actualización que los clientes instalaron con confianza, llegaron a cerca de 18 000 organizaciones (OWASP, 2025). En otras palabras, el pipeline también es una superficie de ataque y debe protegerse como cualquier sistema en producción.</p>
     <p>En el caso práctico, el pipeline se definió en un archivo de GitHub Actions dentro del mismo repositorio, de modo que cualquier cambio en él queda versionado y puede revisarse como el resto del código. Para proteger la cadena de herramientas se aplicaron además cuatro prácticas, que se resumen en la figura 3.</p>
-  </div>
-  <div class="tarjetas">
-    <article class="tarjeta">
-      <h3>Fijar por hash</h3>
-      <p>Cada herramienta del pipeline se referencia por el hash de su versión, no por una etiqueta que alguien podría mover.</p>
-      <pre><code>uses: actions/checkout@3d3c42e5… # v7.0.1</code></pre>
-    </article>
-    <article class="tarjeta">
-      <h3>Permisos mínimos</h3>
-      <p>El token del pipeline solo puede leer. Únicamente la etapa que firma recibe permisos adicionales.</p>
-      <pre><code>permissions:
-  contents: read</code></pre>
-    </article>
-    <article class="tarjeta">
-      <h3>Agentes efímeros</h3>
-      <p>Cada ejecución corre en una máquina nueva que se destruye al terminar: no quedan secretos ni estado entre builds.</p>
-      <pre><code>runs-on: ubuntu-24.04</code></pre>
-    </article>
-    <article class="tarjeta">
-      <h3>Firma sin llaves</h3>
-      <p>La procedencia del artefacto se firma con un certificado de corta vida emitido tras autenticarse, sin custodiar llaves permanentes.</p>
-      <pre><code>id-token: write
-attestations: write</code></pre>
-    </article>
-  </div>
-  <p class="pie-figura"><b>Figura 3.</b> Cuatro prácticas para asegurar la cadena de herramientas, aplicadas en <code>.github/workflows/build-seguro.yml</code>. Elaboración propia.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 8. CAP 3 ═════════════════ -->
 <section class="pagina" id="p8" data-titulo="3 · Compuertas obligatorias">
   <p class="etiqueta">Capítulo 3</p>
   <h2 class="titulo-pagina">Comprobaciones obligatorias que detienen el build</h2>
-  <div class="texto">
-    <p>Agregar herramientas de seguridad al pipeline sirve de poco si sus resultados se pueden ignorar, porque un reporte que nadie revisa no detiene ninguna vulnerabilidad. Por eso, en el nivel 3, SAMM propone definir comprobaciones de seguridad obligatorias y un criterio mínimo para aprobar el build, y hacer que el proceso falle cuando ese criterio no se cumple (OWASP, 2020, p. 147). Con esto, la seguridad deja de ser una recomendación y se convierte en una condición para que el software exista.</p>
-    <p>El impacto de esta decisión es directo. Un artefacto que no cumple con la línea base de seguridad simplemente no se genera, por lo que no puede desplegarse por error ni por presión de tiempo. Los problemas se detectan en el mismo momento en que se introducen, cuando corregirlos cuesta menos, y la responsabilidad queda clara porque el pipeline indica qué control falló y por qué (figura 4).</p>
-    <p>Esto no significa que cualquier hallazgo deba bloquearlo todo. SAMM recomienda fijar una severidad máxima aceptada, generar advertencias para los problemas que están por debajo de ese umbral y registrarlas en un sistema central para hacerles seguimiento (OWASP, 2020, pp. 147-148). También admite un mecanismo de excepción cuando un riesgo ya fue aceptado o mitigado, siempre que se apruebe de forma explícita y quede registrado con su justificación (OWASP, 2020, p. 147).</p>
-    <p>En el caso práctico esto ocurrió desde la primera ejecución. El análisis dinámico generó una advertencia porque las respuestas del servicio no se pueden almacenar en caché, algo que se configuró así a propósito para que los datos de los radicados no queden guardados en el navegador. Mientras no se resolvió, la publicación del artefacto quedó bloqueada, aunque la compilación y los demás análisis habían pasado (figura 5). En lugar de desactivar el control, se registró una excepción documentada en el archivo de reglas, tal como lo propone SAMM.</p>
-  </div>
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>Una comprobación que se puede ignorar no protege. SAMM propone definir controles obligatorios y hacer que el build falle cuando no se cumplen (OWASP, 2020, p. 147). Así, el artefacto que no cumple simplemente no existe.</p></div>
   <figure class="figura">
     <svg class="diagrama" viewBox="0 0 720 230" role="img" aria-labelledby="f4t">
       <title id="f4t">Compuertas del pipeline: el artefacto solo se publica si pasa todas</title>
@@ -309,21 +307,29 @@ attestations: write</code></pre>
     </svg>
     <figcaption><b>Figura 4.</b> Compuertas del pipeline del caso práctico. Si cualquiera falla, la etapa de publicación ni siquiera se ejecuta. Elaboración propia.</figcaption>
   </figure>
+  <p class="seccion-k">Recomendaciones</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Toca cada tarjeta para descubrir el porqué.</p>
+  <div class="volteables tres">
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M9 9l6 6M15 9l-6 6"/></svg><b>Bloquea, no solo avises</b><small>Toca para ver</small></span><span class="cara reverso">Si la línea base no se cumple, el artefacto no se genera y no puede desplegarse por error ni por afán.</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16M6 20V10M12 20V4M18 20v-7"/><path d="M3 12h18" stroke-dasharray="2 2"/></svg><b>Define un umbral</b><small>Toca para ver</small></span><span class="cara reverso">Fija la severidad máxima aceptada y registra las advertencias menores para hacerles seguimiento (OWASP, 2020, pp. 147-148).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l2 2 4-4"/><path d="M12 3 5 6v6c0 4.2 3 7.8 7 9 4-1.2 7-4.8 7-9V6z"/></svg><b>Excepciones aprobadas</b><small>Toca para ver</small></span><span class="cara reverso">Si un riesgo se acepta, la excepción se aprueba de forma explícita y queda registrada con su justificación (OWASP, 2020, p. 147).</span></button>
+  </div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>En la primera ejecución, una sola advertencia del análisis dinámico bastó para frenar la publicación (figura 5). En lugar de apagar el control, se registró una excepción documentada.</p></div></div>
   <figure class="figura captura-grande"><a href="img/primera-ejecucion-dast.jpg" target="_blank" rel="noopener"><img src="img/primera-ejecucion-dast.jpg" alt="Primera ejecución del pipeline: compilación, SAST y SCA en verde, DAST en rojo y publicación omitida" loading="lazy"></a><figcaption><b>Figura 5.</b> Primera ejecución del pipeline en la rama principal. Una advertencia del análisis dinámico bastó para que el artefacto no se publicara. Captura propia.</figcaption></figure>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>Agregar herramientas de seguridad al pipeline sirve de poco si sus resultados se pueden ignorar, porque un reporte que nadie revisa no detiene ninguna vulnerabilidad. Por eso, en el nivel 3, SAMM propone definir comprobaciones de seguridad obligatorias y un criterio mínimo para aprobar el build, y hacer que el proceso falle cuando ese criterio no se cumple (OWASP, 2020, p. 147). Con esto, la seguridad deja de ser una recomendación y se convierte en una condición para que el software exista.</p>
+    <p>El impacto de esta decisión es directo. Un artefacto que no cumple con la línea base de seguridad simplemente no se genera, por lo que no puede desplegarse por error ni por presión de tiempo. Los problemas se detectan en el mismo momento en que se introducen, cuando corregirlos cuesta menos, y la responsabilidad queda clara porque el pipeline indica qué control falló y por qué (figura 4).</p>
+    <p>Esto no significa que cualquier hallazgo deba bloquearlo todo. SAMM recomienda fijar una severidad máxima aceptada, generar advertencias para los problemas que están por debajo de ese umbral y registrarlas en un sistema central para hacerles seguimiento (OWASP, 2020, pp. 147-148). También admite un mecanismo de excepción cuando un riesgo ya fue aceptado o mitigado, siempre que se apruebe de forma explícita y quede registrado con su justificación (OWASP, 2020, p. 147).</p>
+    <p>En el caso práctico esto ocurrió desde la primera ejecución. El análisis dinámico generó una advertencia porque las respuestas del servicio no se pueden almacenar en caché, algo que se configuró así a propósito para que los datos de los radicados no queden guardados en el navegador. Mientras no se resolvió, la publicación del artefacto quedó bloqueada, aunque la compilación y los demás análisis habían pasado (figura 5). En lugar de desactivar el control, se registró una excepción documentada en el archivo de reglas, tal como lo propone SAMM.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 9. CAP 4 ═════════════════ -->
 <section class="pagina" id="p9" data-titulo="4 · Dependencias">
   <p class="etiqueta">Capítulo 4</p>
   <h2 class="titulo-pagina">Evaluar las dependencias</h2>
-  <div class="texto">
-    <p>Una aplicación moderna está hecha, en su mayor parte, de código que su equipo no escribió. Cada librería que se agrega trae a su vez otras dependencias, llamadas transitivas, y cualquiera de ellas puede convertirse en la puerta de entrada de un ataque (figura 6). Ortega (2018) ya incluía este riesgo en la categoría A9 del OWASP Top 10, que agrupa las vulnerabilidades que se presentan al usar componentes con fallas conocidas (p. 91). Esa misma categoría evolucionó hasta convertirse en la A03:2025, que hoy abarca todas las fallas de la cadena de suministro del software y no solo las vulnerabilidades conocidas (OWASP, 2025).</p>
-    <p>El primer paso es saber qué se está usando. SAMM recomienda llevar un registro de todas las dependencias que llegan a producción, conocido como lista de materiales o SBOM, con datos como dónde se usa cada una, su versión, su licencia, su origen y si sigue teniendo soporte (OWASP, 2020, pp. 149-150). En el nivel 2 propone ir más allá, con una lista de dependencias aprobadas, revisiones periódicas y una regla clara, que consiste en tratar cualquier no conformidad como un defecto y apoyarse en herramientas automáticas que detecten las librerías vulnerables (OWASP, 2020, pp. 152-153). En el nivel 3, el pipeline debe fallar cuando una dependencia tenga problemas por encima de la criticidad definida (OWASP, 2020, p. 156).</p>
-    <p>Log4Shell mostró por qué esto importa. La vulnerabilidad CVE-2021-44228 en Log4j, una librería de registro de eventos presente en miles de aplicaciones Java, se ha relacionado con campañas de ransomware, minería de criptomonedas y otros ataques (OWASP, 2025). Muchos equipos tardaron días en saber si estaban afectados, porque no tenían claro qué versiones usaban.</p>
-    <p>En el caso práctico, el servicio no tiene dependencias en tiempo de ejecución, ya que solo usa las clases del JDK, y en cada compilación se genera su SBOM en formato CycloneDX. Además, OSV-Scanner revisa las dependencias contra una base pública de vulnerabilidades y detiene el build si encuentra alguna. Las excepciones aprobadas se registran en un archivo con su justificación y una fecha de revisión.</p>
-  </div>
-  <div class="dos-col">
-    <figure class="figura">
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>La mayor parte de una aplicación es código que su equipo no escribió. SAMM recomienda saber qué dependencias se usan, evaluarlas y frenar el build cuando alguna es vulnerable (OWASP, 2020, pp. 149-156).</p></div>
+  <figure class="figura arbol">
       <svg class="diagrama" viewBox="0 0 340 250" role="img" aria-labelledby="f5t">
         <title id="f5t">Árbol de dependencias con una vulnerable</title>
         <g font-family="JetBrains Mono" font-size="11" text-anchor="middle">
@@ -344,54 +350,53 @@ attestations: write</code></pre>
       </svg>
       <figcaption><b>Figura 6.</b> Una vulnerabilidad puede llegar por una dependencia transitiva que nadie agregó de forma explícita. Elaboración propia.</figcaption>
     </figure>
-    <div class="lista-control">
-      <p class="lista-titulo">De cada dependencia, registra y revisa:</p>
-      <ul>
-        <li>Dónde se usa y en qué versión.</li>
-        <li>Su licencia.</li>
-        <li>De dónde viene (repositorio, autor).</li>
-        <li>Si sigue mantenida y con soporte.</li>
-        <li>Si tiene vulnerabilidades conocidas.</li>
-        <li>Si de verdad hace falta incluirla.</li>
-      </ul>
-      <p class="lista-fuente">Adaptado de OWASP (2020, pp. 149-153).</p>
-    </div>
+  <div class="caso-real"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><div><p class="idea-k">Caso real</p><p>La falla CVE-2021-44228 en Log4j, presente en miles de aplicaciones Java, se ha relacionado con ransomware y minería de criptomonedas (OWASP, 2025). Ortega (2018) ya advertía este riesgo en la categoría A9 del OWASP Top 10, sobre componentes con vulnerabilidades conocidas (p. 91).</p></div></div>
+  <p class="seccion-k">Recomendaciones</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Toca cada tarjeta para descubrir el porqué.</p>
+  <div class="volteables">
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><b>Lleva un SBOM</b><small>Toca para ver</small></span><span class="cara reverso">Registra cada dependencia con su versión, licencia, origen y estado de soporte (OWASP, 2020, pp. 149-150).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><b>Escanéalas siempre</b><small>Toca para ver</small></span><span class="cara reverso">Usa una herramienta automática que compare las dependencias con bases de vulnerabilidades conocidas (OWASP, 2020, p. 153).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><b>Trátalas como defectos</b><small>Toca para ver</small></span><span class="cara reverso">Una dependencia vulnerable se gestiona como cualquier error propio, con responsable y plazo (OWASP, 2020, p. 153).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg><b>Menos es más</b><small>Toca para ver</small></span><span class="cara reverso">Cada librería suma riesgo. Incluye solo las que tengan una razón válida para estar (OWASP, 2020, p. 153).</span></button>
   </div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>El servicio no tiene dependencias en tiempo de ejecución, genera su SBOM en cada build y OSV-Scanner lo detiene si encuentra una vulnerabilidad conocida.</p></div></div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>Una aplicación moderna está hecha, en su mayor parte, de código que su equipo no escribió. Cada librería que se agrega trae a su vez otras dependencias, llamadas transitivas, y cualquiera de ellas puede convertirse en la puerta de entrada de un ataque (figura 6). Ortega (2018) ya incluía este riesgo en la categoría A9 del OWASP Top 10, que agrupa las vulnerabilidades que se presentan al usar componentes con fallas conocidas (p. 91). Esa misma categoría evolucionó hasta convertirse en la A03:2025, que hoy abarca todas las fallas de la cadena de suministro del software y no solo las vulnerabilidades conocidas (OWASP, 2025).</p>
+    <p>El primer paso es saber qué se está usando. SAMM recomienda llevar un registro de todas las dependencias que llegan a producción, conocido como lista de materiales o SBOM, con datos como dónde se usa cada una, su versión, su licencia, su origen y si sigue teniendo soporte (OWASP, 2020, pp. 149-150). En el nivel 2 propone ir más allá, con una lista de dependencias aprobadas, revisiones periódicas y una regla clara, que consiste en tratar cualquier no conformidad como un defecto y apoyarse en herramientas automáticas que detecten las librerías vulnerables (OWASP, 2020, pp. 152-153). En el nivel 3, el pipeline debe fallar cuando una dependencia tenga problemas por encima de la criticidad definida (OWASP, 2020, p. 156).</p>
+    <p>Log4Shell mostró por qué esto importa. La vulnerabilidad CVE-2021-44228 en Log4j, una librería de registro de eventos presente en miles de aplicaciones Java, se ha relacionado con campañas de ransomware, minería de criptomonedas y otros ataques (OWASP, 2025). Muchos equipos tardaron días en saber si estaban afectados, porque no tenían claro qué versiones usaban.</p>
+    <p>En el caso práctico, el servicio no tiene dependencias en tiempo de ejecución, ya que solo usa las clases del JDK, y en cada compilación se genera su SBOM en formato CycloneDX. Además, OSV-Scanner revisa las dependencias contra una base pública de vulnerabilidades y detiene el build si encuentra alguna. Las excepciones aprobadas se registran en un archivo con su justificación y una fecha de revisión.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 10. CAP 5 ═════════════════ -->
 <section class="pagina" id="p10" data-titulo="5 · Caso práctico">
   <p class="etiqueta">Capítulo 5</p>
-  <h2 class="titulo-pagina">Caso práctico: el pipeline en acción</h2>
-  <div class="texto">
+  <h2 class="titulo-pagina">Caso práctico, el pipeline en acción</h2>
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>Un servicio web Java 21 para consultar radicados, que valida sus entradas con una lista blanca (Ortega, 2018, p. 82), y un pipeline de cinco compuertas. Para probarlo, tres ramas introducen a propósito una falla distinta.</p></div>
+  <p class="seccion-k">Explora las ramas</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Elige una rama para ver qué cambió y en qué compuerta se detuvo.</p>
+  <div class="ramas" data-ramas='[{"rama": "main", "cambio": "Versión segura", "compuerta": "Ninguna, pasa las cinco", "estado": "ok", "gates": ["ok", "ok", "ok", "ok", "ok"], "detalle": "Artefacto publicado con su huella SHA-256 y procedencia firmada."}, {"rama": "demo/log4shell", "cambio": "Agrega log4j-core 2.14.1", "compuerta": "3 · SCA (OSV-Scanner)", "estado": "mal", "gates": ["ok", "ok", "mal", "ok", "no"], "detalle": "OSV-Scanner encontró ocho vulnerabilidades conocidas, dos de ellas críticas."}, {"rama": "demo/hash-debil", "cambio": "Usa MD5 y Random para generar tokens", "compuerta": "2 · SAST (Find Security Bugs)", "estado": "mal", "gates": ["ok", "mal", "ok", "no", "no"], "detalle": "El análisis estático detectó criptografía débil y aleatorios predecibles."}, {"rama": "demo/sin-cabeceras", "cambio": "Quita las cabeceras de seguridad HTTP", "compuerta": "4 · DAST (OWASP ZAP)", "estado": "mal", "gates": ["ok", "ok", "ok", "mal", "no"], "detalle": "ZAP detectó la ausencia de protecciones al atacar el servicio en ejecución."}]'>
+    <div class="rama-btns"><button type="button" class="rama-btn activa" data-i="0"><code>main</code></button><button type="button" class="rama-btn" data-i="1"><code>demo/log4shell</code></button><button type="button" class="rama-btn" data-i="2"><code>demo/hash-debil</code></button><button type="button" class="rama-btn" data-i="3"><code>demo/sin-cabeceras</code></button></div>
+    <div class="rama-panel">
+      <ol class="gates">
+        <li><span></span>1 · Secretos</li><li><span></span>2 · SAST</li><li><span></span>3 · SCA</li><li><span></span>4 · DAST</li><li><span></span>5 · Publicar</li>
+      </ol>
+      <dl class="rama-info"><dt>Cambio</dt><dd data-k="cambio"></dd><dt>Compuerta que lo detiene</dt><dd data-k="compuerta"></dd><dt>Resultado</dt><dd data-k="detalle"></dd></dl>
+    </div>
+  </div>
+  <p class="pie-figura"><b>Tabla 1.</b> Ramas del caso práctico y compuerta que detiene cada una. Elaboración propia.</p>
+  <div class="capturas"><figure class="figura captura"><a href="img/main-exitoso.jpg" target="_blank" rel="noopener"><img src="img/main-exitoso.jpg" alt="Ejecución exitosa en main con las cinco etapas en verde" loading="lazy"></a><figcaption><b>Figura 7.</b> Rama principal con las cinco compuertas superadas y el artefacto publicado. Captura propia.</figcaption></figure><figure class="figura captura"><a href="img/log4shell-sca.jpg" target="_blank" rel="noopener"><img src="img/log4shell-sca.jpg" alt="Resultado de OSV-Scanner con ocho vulnerabilidades en log4j 2.14.1" loading="lazy"></a><figcaption><b>Figura 8.</b> OSV-Scanner detiene la rama <code>demo/log4shell</code> al encontrar vulnerabilidades conocidas en Log4j 2.14.1. Captura propia.</figcaption></figure></div>
+  <details class="leer-mas"><summary>Leer más</summary>
     <p>El caso práctico es un servicio web sencillo, escrito en Java 21 y construido con Maven, que permite consultar el estado de un radicado a partir de su número. La entrada se valida con una lista blanca, es decir, con una expresión regular que solo acepta el formato esperado y rechaza todo lo demás. Ortega (2018) recomienda esta técnica sobre las listas negras, porque siempre es posible enumerar los valores válidos, mientras que los valores maliciosos pueden ser innumerables (p. 82). El código, el pipeline y esta cartilla están publicados en el mismo repositorio de GitHub.</p>
     <p>Para comprobar que las compuertas realmente funcionan, además de la rama principal se crearon tres ramas de demostración. Cada una introduce a propósito una falla distinta, como se resume en la tabla 1. La rama principal pasó las cinco etapas y generó el artefacto con su huella SHA-256 y su procedencia firmada (figura 7). Las tres ramas de demostración fueron detenidas, cada una en la compuerta que le correspondía, y en ninguna se llegó a publicar el artefacto. En la rama de Log4Shell, por ejemplo, OSV-Scanner encontró ocho vulnerabilidades conocidas en log4j-core y log4j-api 2.14.1, dos de ellas críticas, e indicó la versión en la que cada una se corrige (figura 8). Esto confirma que el pipeline no se limita a advertir sobre los problemas, sino que impide que el software inseguro avance.</p>
-  </div>
-  <table class="tabla">
-    <thead><tr><th>Rama</th><th>Cambio introducido</th><th>Compuerta que lo detiene</th><th>Resultado</th></tr></thead>
-    <tbody>
-      <tr><td><code>main</code></td><td>Versión segura</td><td>—</td><td class="ok">✓ artefacto publicado</td></tr>
-      <tr><td><code>demo/log4shell</code></td><td>Agrega <code>log4j-core 2.14.1</code></td><td>3 · SCA (OSV-Scanner)</td><td class="mal">✗ build detenido</td></tr>
-      <tr><td><code>demo/hash-debil</code></td><td>Usa MD5 y <code>Random</code> para tokens</td><td>2 · SAST (FindSecBugs)</td><td class="mal">✗ build detenido</td></tr>
-      <tr><td><code>demo/sin-cabeceras</code></td><td>Quita las cabeceras de seguridad</td><td>4 · DAST (OWASP ZAP)</td><td class="mal">✗ build detenido</td></tr>
-    </tbody>
-  </table>
-  <p class="pie-figura"><b>Tabla 1.</b> Ramas del caso práctico y compuerta que detiene cada una. Elaboración propia.</p>
-  <div class="capturas">
-    <figure class="figura captura"><a href="img/main-exitoso.jpg" target="_blank" rel="noopener"><img src="img/main-exitoso.jpg" alt="Ejecución exitosa en main con las cinco etapas en verde" loading="lazy"></a><figcaption><b>Figura 7.</b> Rama principal con las cinco compuertas superadas y el artefacto publicado. Captura propia.</figcaption></figure>
-    <figure class="figura captura"><a href="img/log4shell-sca.jpg" target="_blank" rel="noopener"><img src="img/log4shell-sca.jpg" alt="Resultado de OSV-Scanner con ocho vulnerabilidades en log4j 2.14.1" loading="lazy"></a><figcaption><b>Figura 8.</b> OSV-Scanner detiene la rama <code>demo/log4shell</code> al encontrar vulnerabilidades conocidas en Log4j 2.14.1. Captura propia.</figcaption></figure>
-  </div>
+  </details>
 </section>
 
 <!-- ═════════════════ 11. CAP 6 ═════════════════ -->
 <section class="pagina" id="p11" data-titulo="6 · SAST y DAST">
   <p class="etiqueta">Capítulo 6</p>
-  <h2 class="titulo-pagina">Análisis estático y dinámico: dos miradas complementarias</h2>
-  <div class="texto">
-    <p>El análisis estático (SAST) revisa el código fuente o compilado sin ejecutarlo, en busca de patrones que se sabe que son inseguros. Su ventaja es que actúa temprano, sobre cada cambio, y puede integrarse en el propio proceso de compilación. El análisis dinámico (DAST), en cambio, evalúa la aplicación mientras está en ejecución, desde afuera, de la misma forma en que lo haría un atacante. SAMM contempla ambos como controles que un pipeline automatizado puede incluir para detectar a tiempo las regresiones de seguridad y hacer fallar el build (OWASP, 2020, p. 138).</p>
-    <p>Estos dos enfoques no compiten, se complementan. El SAST encuentra problemas que no se ven desde afuera, como el uso de algoritmos de cifrado débiles, mientras que el DAST encuentra problemas que no están en el código, como una configuración insegura del servidor o la falta de cabeceras de protección (tabla 2). Para el análisis dinámico, Ortega (2018) destaca OWASP Zed Attack Proxy (ZAP), una herramienta que permite capturar y analizar el tráfico HTTP y HTTPS y escanear automáticamente las vulnerabilidades de una aplicación web (p. 89). También recomienda el estándar ASVS como lista de verificación durante las pruebas, por estar organizado por tipo de vulnerabilidad y nivel de exigencia (p. 94).</p>
-    <p>El caso práctico muestra con claridad cómo se apoyan uno al otro. La rama que usa MD5 para generar tokens fue detenida por el análisis estático, pero habría pasado sin problema el análisis dinámico, porque el servicio respondía bien. En cambio, la rama sin cabeceras de seguridad compiló y pasó el análisis estático, y solo fue detenida cuando ZAP examinó las respuestas del servicio en ejecución.</p>
-  </div>
+  <h2 class="titulo-pagina">Análisis estático y dinámico, dos miradas que se complementan</h2>
+  <div class="idea-clave"><p class="idea-k">Idea clave</p><p>El análisis estático revisa el código sin ejecutarlo y el dinámico ataca la aplicación en ejecución. No compiten, porque cada uno encuentra lo que el otro no puede ver (OWASP, 2020, p. 138).</p></div>
   <table class="tabla comparativa">
     <thead><tr><th></th><th>Estático (SAST)</th><th>Dinámico (DAST)</th></tr></thead>
     <tbody>
@@ -403,22 +408,59 @@ attestations: write</code></pre>
     </tbody>
   </table>
   <p class="pie-figura"><b>Tabla 2.</b> Comparación entre análisis estático y dinámico. Elaboración propia.</p>
+  <p class="seccion-k">Herramientas</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Toca cada tarjeta para descubrir el porqué.</p>
+  <div class="volteables tres">
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c3 3 3 13 0 16M12 4c-3 3-3 13 0 16"/></svg><b>OWASP ZAP</b><small>Toca para ver</small></span><span class="cara reverso">Captura y analiza el tráfico HTTP y HTTPS y escanea automáticamente las vulnerabilidades de una aplicación web (Ortega, 2018, p. 89).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg><b>ASVS como lista de chequeo</b><small>Toca para ver</small></span><span class="cara reverso">Organiza los controles por tipo de vulnerabilidad y nivel de exigencia, útil durante las pruebas (Ortega, 2018, p. 94).</span></button>
+    <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><b>Find Security Bugs</b><small>Toca para ver</small></span><span class="cara reverso">Analiza el código compilado de Java en busca de patrones inseguros, como algoritmos de cifrado débiles, dentro del mismo build.</span></button>
+  </div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>La rama que usa MD5 cayó en el análisis estático, aunque habría pasado el dinámico. La rama sin cabeceras pasó el estático y solo ZAP la detuvo con el servicio en ejecución.</p></div></div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>El análisis estático (SAST) revisa el código fuente o compilado sin ejecutarlo, en busca de patrones que se sabe que son inseguros. Su ventaja es que actúa temprano, sobre cada cambio, y puede integrarse en el propio proceso de compilación. El análisis dinámico (DAST), en cambio, evalúa la aplicación mientras está en ejecución, desde afuera, de la misma forma en que lo haría un atacante. SAMM contempla ambos como controles que un pipeline automatizado puede incluir para detectar a tiempo las regresiones de seguridad y hacer fallar el build (OWASP, 2020, p. 138).</p>
+    <p>Estos dos enfoques no compiten, se complementan. El SAST encuentra problemas que no se ven desde afuera, como el uso de algoritmos de cifrado débiles, mientras que el DAST encuentra problemas que no están en el código, como una configuración insegura del servidor o la falta de cabeceras de protección (tabla 2). Para el análisis dinámico, Ortega (2018) destaca OWASP Zed Attack Proxy (ZAP), una herramienta que permite capturar y analizar el tráfico HTTP y HTTPS y escanear automáticamente las vulnerabilidades de una aplicación web (p. 89). También recomienda el estándar ASVS como lista de verificación durante las pruebas, por estar organizado por tipo de vulnerabilidad y nivel de exigencia (p. 94).</p>
+    <p>El caso práctico muestra con claridad cómo se apoyan uno al otro. La rama que usa MD5 para generar tokens fue detenida por el análisis estático, pero habría pasado sin problema el análisis dinámico, porque el servicio respondía bien. En cambio, la rama sin cabeceras de seguridad compiló y pasó el análisis estático, y solo fue detenida cuando ZAP examinó las respuestas del servicio en ejecución.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 12. CONCLUSIONES ═════════════════ -->
-<section class="pagina" id="p12" data-titulo="Conclusiones">
+<section class="pagina" id="p12" data-titulo="Autodiagnóstico">
+  <p class="etiqueta">Ponlo en práctica</p>
+  <h2 class="titulo-pagina">¿Qué tan seguro es tu build?</h2>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Marca lo que ya cumple tu proyecto y descubre en qué nivel de madurez estás.</p>
+  <div class="diagnostico">
+    <fieldset class="grupo n1"><legend>Nivel 1</legend><label class="chk"><input type="checkbox" data-n="1"><span>La definición del build está documentada y permite recrearlo desde cero.</span></label><label class="chk"><input type="checkbox" data-n="1"><span>Cada build genera una huella del artefacto para verificarlo después.</span></label><label class="chk"><input type="checkbox" data-n="1"><span>Tienes una lista actualizada de las dependencias de cada aplicación (SBOM).</span></label></fieldset><fieldset class="grupo n2"><legend>Nivel 2</legend><label class="chk"><input type="checkbox" data-n="2"><span>El build se ejecuta de principio a fin sin intervención humana.</span></label><label class="chk"><input type="checkbox" data-n="2"><span>Los secretos del build están cifrados y con acceso mínimo.</span></label><label class="chk"><input type="checkbox" data-n="2"><span>Una herramienta revisa automáticamente las dependencias contra vulnerabilidades nuevas.</span></label></fieldset><fieldset class="grupo n3"><legend>Nivel 3</legend><label class="chk"><input type="checkbox" data-n="3"><span>El build falla si la aplicación no cumple la línea base de seguridad.</span></label><label class="chk"><input type="checkbox" data-n="3"><span>Tienes definida la severidad máxima aceptada para las vulnerabilidades.</span></label><label class="chk"><input type="checkbox" data-n="3"><span>El build falla si una dependencia tiene vulnerabilidades sin evaluar.</span></label></fieldset>
+    <div class="resultado" aria-live="polite">
+      <div class="medidor"><span></span></div>
+      <p class="res-nivel">Punto de partida</p>
+      <p class="res-texto">Empieza por documentar tu build y generar la lista de dependencias (capítulos 1 y 4).</p>
+    </div>
+  </div>
+  <p class="pie-figura">Adaptado de los criterios de calidad de la práctica <em>Secure Build</em> (OWASP, 2020, pp. 143-157).</p>
+</section>
+
+<section class="pagina" id="p13" data-titulo="Conclusiones">
+  <p class="etiqueta">Para cerrar</p>
   <h2 class="titulo-pagina">Conclusiones</h2>
-  <div class="texto">
-    <p>La seguridad del software ya no se resuelve solo en el código. A lo largo de esta cartilla se mostró que el proceso de compilación y las dependencias son, hoy, una de las principales puertas de entrada de los ataques, y que la práctica <em>Secure Build</em> de OWASP SAMM ofrece un camino gradual para cerrarlas, primero definiendo el build de forma formal, luego automatizándolo y protegiendo sus herramientas, y finalmente haciendo que las comprobaciones de seguridad sean obligatorias.</p>
-    <p>Frente a la primera pregunta orientadora, automatizar el build elimina los errores humanos y garantiza que lo que llega a producción es exactamente lo que se revisó, pero también convierte al pipeline en un sistema crítico que debe protegerse con el mismo cuidado que la aplicación. Frente a la segunda, definir comprobaciones obligatorias que hagan fallar el build cambia por completo el papel de la seguridad, porque deja de ser un reporte que se puede ignorar y se convierte en una condición para que el artefacto exista. El caso práctico lo demostró desde la primera ejecución, cuando una sola advertencia bastó para que el artefacto no se publicara.</p>
-    <p>También quedó claro que las dependencias merecen el mismo rigor que el código propio, y que el análisis estático y el dinámico se necesitan mutuamente, porque cada uno encuentra problemas que el otro no puede ver.</p>
+  <div class="tiles tres">
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v6c0 4.2 3 7.8 7 9 4-1.2 7-4.8 7-9V6z"/></svg><p class="idea-k">El build es superficie de ataque</p><p>Automatizarlo evita el error humano, pero obliga a protegerlo como cualquier sistema crítico.</p></div>
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M9 9l6 6M15 9l-6 6"/></svg><p class="idea-k">La seguridad como condición</p><p>Las comprobaciones obligatorias convierten la seguridad en un requisito para que el artefacto exista. El caso práctico lo demostró desde la primera ejecución.</p></div>
+    <div class="tile"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><p class="idea-k">Dependencias con el mismo rigor</p><p>Las librerías de terceros merecen la misma revisión que el código propio, y el análisis estático y el dinámico se necesitan mutuamente.</p></div>
+  </div>
+  <div class="postura">
+    <p class="idea-k">Mi postura</p>
     <p>Debo ser sincera, me sorprendió todo lo que se puede validar de manera automática. En los proyectos en los que trabajo todavía desplegamos el archivo WAR de forma manual, y ver un pipeline que revisa librerías, componentes, configuración y hasta el manejo de la caché me mostró la distancia que existe entre lo que hacemos y lo que ya es posible. Lo que más me impactó fue el caso de Log4j, porque es una librería muy común en los proyectos Java que conozco, y dudo que todos hayan revisado si la versión que usan es vulnerable. En otro de mis trabajos, la migración hacia una arquitectura desacoplada sobre OpenShift está proyectada en el plan estratégico desde hace dos años, y el módulo de seguridad ni siquiera ha sido aprobado.</p>
     <p>Mi planteamiento es que la seguridad en el build no debería esperar a las grandes migraciones. Muchas de estas prácticas no dependen de cambiar la infraestructura y pueden empezar hoy, en cualquier proyecto Java Maven, con algo tan sencillo como generar la lista de dependencias y escanearla contra una base de vulnerabilidades conocidas. Como dijo el profesor en la clase, el código se revisa, pero el build se demuestra, y creo que ese es el cambio de mentalidad que todavía nos falta dar.</p>
   </div>
+  <details class="leer-mas"><summary>Leer más</summary>
+    <p>La seguridad del software ya no se resuelve solo en el código. A lo largo de esta cartilla se mostró que el proceso de compilación y las dependencias son, hoy, una de las principales puertas de entrada de los ataques, y que la práctica <em>Secure Build</em> de OWASP SAMM ofrece un camino gradual para cerrarlas, primero definiendo el build de forma formal, luego automatizándolo y protegiendo sus herramientas, y finalmente haciendo que las comprobaciones de seguridad sean obligatorias.</p>
+    <p>Frente a la primera pregunta orientadora, automatizar el build elimina los errores humanos y garantiza que lo que llega a producción es exactamente lo que se revisó, pero también convierte al pipeline en un sistema crítico que debe protegerse con el mismo cuidado que la aplicación. Frente a la segunda, definir comprobaciones obligatorias que hagan fallar el build cambia por completo el papel de la seguridad, porque deja de ser un reporte que se puede ignorar y se convierte en una condición para que el artefacto exista. El caso práctico lo demostró desde la primera ejecución, cuando una sola advertencia bastó para que el artefacto no se publicara.</p>
+    <p>También quedó claro que las dependencias merecen el mismo rigor que el código propio, y que el análisis estático y el dinámico se necesitan mutuamente, porque cada uno encuentra problemas que el otro no puede ver.</p>
+  </details>
 </section>
 
 <!-- ═════════════════ 13. REFERENCIAS ═════════════════ -->
-<section class="pagina" id="p13" data-titulo="Referencias">
+<section class="pagina" id="p14" data-titulo="Referencias">
   <h2 class="titulo-pagina">Referencias</h2>
   <ul class="referencias">
     <li><b>Anthropic. (2026).</b> <i>Claude</i> (versión Opus 5.5) [Modelo de lenguaje de gran tamaño]. https://claude.ai</li>

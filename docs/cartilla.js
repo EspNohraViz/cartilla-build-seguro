@@ -109,3 +109,50 @@
 
   desdeHash();
 })();
+
+// tarjetas que se voltean
+document.querySelectorAll('.volteable').forEach(t => {
+  t.addEventListener('click', () => {
+    const v = t.classList.toggle('volteada');
+    t.setAttribute('aria-pressed', v);
+  });
+});
+
+// ramas del caso práctico
+document.querySelectorAll('.ramas').forEach(box => {
+  const datos = JSON.parse(box.dataset.ramas);
+  const gates = box.querySelectorAll('.gates li');
+  const mostrar = i => {
+    const d = datos[i];
+    box.querySelectorAll('.rama-btn').forEach((b, j) => b.classList.toggle('activa', j === i));
+    gates.forEach((g, j) => { g.className = d.gates[j]; });
+    box.querySelectorAll('[data-k]').forEach(el => { el.textContent = d[el.dataset.k]; });
+  };
+  box.querySelectorAll('.rama-btn').forEach(b => b.addEventListener('click', () => mostrar(+b.dataset.i)));
+  mostrar(0);
+});
+
+// autodiagnóstico
+document.querySelectorAll('.diagnostico').forEach(box => {
+  const checks = [...box.querySelectorAll('input[type=checkbox]')];
+  const barra = box.querySelector('.medidor span');
+  const nivel = box.querySelector('.res-nivel');
+  const texto = box.querySelector('.res-texto');
+  const msgs = [
+    ['Punto de partida', 'Empieza por documentar tu build y generar la lista de dependencias (capítulos 1 y 4).'],
+    ['Nivel 1', 'Tu build es repetible y conoces tus dependencias. El siguiente paso es automatizarlo y asegurar sus herramientas (capítulo 2).'],
+    ['Nivel 2', 'Tu build está automatizado y vigila sus dependencias. El siguiente paso es volver obligatorias las comprobaciones (capítulo 3).'],
+    ['Nivel 3', 'Tu build impide que los defectos conocidos lleguen a producción. Mantén las herramientas al día y revisa el umbral cada año.']
+  ];
+  const calcular = () => {
+    let n = 0;
+    for (const k of [1, 2, 3]) {
+      if (checks.filter(c => +c.dataset.n === k).every(c => c.checked)) n = k; else break;
+    }
+    barra.style.width = Math.round(checks.filter(c => c.checked).length / checks.length * 100) + '%';
+    nivel.textContent = msgs[n][0];
+    texto.textContent = msgs[n][1];
+  };
+  checks.forEach(c => c.addEventListener('change', calcular));
+  calcular();
+});
