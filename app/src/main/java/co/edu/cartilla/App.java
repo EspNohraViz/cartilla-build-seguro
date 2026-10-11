@@ -69,16 +69,7 @@ public final class App {
     }
 
     /** Cabeceras de seguridad que el análisis dinámico (ZAP) verifica en cada respuesta. */
-    static final Map<String, String> CABECERAS_SEGURIDAD = Map.of(
-            "Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'",
-            "X-Content-Type-Options", "nosniff",
-            "X-Frame-Options", "DENY",
-            "Referrer-Policy", "no-referrer",
-            "Permissions-Policy", "geolocation=(), camera=(), microphone=()",
-            "Cross-Origin-Resource-Policy", "same-origin",
-            "Cross-Origin-Opener-Policy", "same-origin",
-            "Cross-Origin-Embedder-Policy", "require-corp",
-            "Cache-Control", "no-store");
+    static final Map<String, String> CABECERAS_SEGURIDAD = Map.of(); // DEMO: sin cabeceras de seguridad
 
     private static void responder(HttpExchange ex, int codigo, String tipo, String cuerpo) throws IOException {
         byte[] bytes = cuerpo.getBytes(StandardCharsets.UTF_8);
