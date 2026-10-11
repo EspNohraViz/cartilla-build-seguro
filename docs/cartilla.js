@@ -156,3 +156,33 @@ document.querySelectorAll('.diagnostico').forEach(box => {
   checks.forEach(c => c.addEventListener('change', calcular));
   calcular();
 });
+
+// piensa como atacante: simula el validador del caso práctico
+document.querySelectorAll('.atacante').forEach(box => {
+  const RADICADO = /^RAD-\d{4}-\d{5}$/;
+  const input = box.querySelector('input');
+  const cod = box.querySelector('.atq-cod');
+  const exp = box.querySelector('.atq-exp');
+  const set = (k, v) => { box.querySelector('[data-a="' + k + '"]').textContent = v; };
+  const evaluar = (tipo, stride) => {
+    const v = input.value;
+    const ok = RADICADO.test(v);
+    cod.className = 'atq-cod ' + (ok ? 'ok' : 'mal');
+    cod.textContent = ok ? '200 OK · consulta atendida' : '400 Bad Request · entrada rechazada';
+    set('tipo', tipo || (ok ? 'Entrada legítima' : 'Entrada no esperada'));
+    set('stride', stride || (ok ? 'No aplica' : 'Sin clasificar'));
+    exp.textContent = ok
+      ? 'La entrada cumple el formato RAD-AAAA-NNNNN, así que el servicio la procesa con normalidad.'
+      : 'La lista blanca solo acepta el formato RAD-AAAA-NNNNN. Todo lo demás se rechaza antes de llegar a la lógica del servicio, y la respuesta no repite la entrada, por lo que el ataque no tiene por dónde ejecutarse.';
+  };
+  box.querySelectorAll('.atq-btns button').forEach(b => b.addEventListener('click', () => {
+    box.querySelectorAll('.atq-btns button').forEach(x => x.classList.toggle('activa', x === b));
+    input.value = b.dataset.v;
+    evaluar(b.dataset.tipo, b.dataset.stride);
+  }));
+  input.addEventListener('input', () => {
+    box.querySelectorAll('.atq-btns button').forEach(x => x.classList.remove('activa'));
+    evaluar();
+  });
+  box.querySelector('.atq-btns button:nth-child(2)').click();
+});

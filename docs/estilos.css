@@ -425,3 +425,20 @@ html, body { overflow-x: clip; }
 .volteable { height: 232px; }
 .volteable .reverso { font-size: 13.8px; line-height: 1.42; }
 .tile .idea-k { font-family: var(--sans); font-size: 16.5px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--tinta); margin-bottom: 6px; }
+
+/* piensa como atacante */
+.atacante { background: var(--escritorio); color: #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 6px; }
+.atq-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.atq-btns button { border: 1px solid #ffffff30; background: transparent; color: #fff; border-radius: 999px; padding: 6px 14px; cursor: pointer; font-family: var(--sans); font-size: 14px; }
+.atq-btns button.activa { background: var(--acento); border-color: var(--acento); color: var(--escritorio); font-weight: 700; }
+.atq-campo { display: flex; align-items: center; background: #0b1324; border: 1px solid #ffffff25; border-radius: 8px; overflow: hidden; font-family: var(--mono); font-size: 13px; }
+.atq-campo span { padding: 10px 0 10px 12px; color: #94a3b8; white-space: nowrap; }
+.atq-campo input { flex: 1; min-width: 0; background: transparent; border: 0; color: #fff; font-family: var(--mono); font-size: 13px; padding: 10px 12px 10px 2px; outline: none; }
+.atq-res { margin-top: 14px; }
+.atq-cod { font-family: var(--mono); font-weight: 700; font-size: 15px; margin: 0 0 8px; }
+.atq-cod.ok { color: var(--ok-claro); } .atq-cod.mal { color: var(--mal-claro); }
+.atq-res dl { display: grid; grid-template-columns: 150px 1fr; gap: 4px 12px; margin: 0 0 8px; font-size: 14.5px; }
+.atq-res dt { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--acento-claro); padding-top: 3px; }
+.atq-res dd { margin: 0; }
+.atq-exp { margin: 0; font-size: 14.5px; color: #cbd5e1; }
+@media (max-width: 760px) { .atq-campo span { display: none; } .atq-res dl { grid-template-columns: 1fr; } }
