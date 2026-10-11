@@ -13,7 +13,7 @@
 <body>
 
 <header class="barra">
-  <a class="marca" href="#p1">BUILD<span>SEGURO</span></a>
+  <a class="marca" href="#p1"><svg class="escudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4.5 5.4v6.1c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10V5.4L12 2.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>BUILD <span>SEGURO</span></a>
   <nav class="barra-nav" aria-label="Navegación de páginas">
     <button id="ant" aria-label="Página anterior">&larr;</button>
     <span id="contador" aria-live="polite">1 / 13</span>
@@ -101,18 +101,17 @@
 
 <!-- ═════════════════ 2. PÁGINA LEGAL ═════════════════ -->
 <section class="pagina legal" id="p2" data-titulo="Página legal">
-  <div class="legal-bloque">
-    <p class="legal-titulo">Build seguro: que no compile lo inseguro</p>
-    <p>Cartilla digital sobre recomendaciones de desarrollo seguro centradas en el proceso de compilación y las dependencias del software.</p>
-    <dl>
-      <dt>Autora</dt><dd>Nohra María Vizcaíno Florez</dd>
-      <dt>Fecha</dt><dd>12 de octubre de 2026</dd>
-      <dt>Curso</dt><dd>Seguridad en el Desarrollo de Software · Semana 7</dd>
-      <dt>Institución</dt><dd>Corporación Universitaria Minuto de Dios – UNIMINUTO</dd>
-      <dt>Caso práctico</dt><dd><a href="https://github.com/EspNohraViz/cartilla-build-seguro">github.com/EspNohraViz/cartilla-build-seguro</a></dd>
-    </dl>
-    <p class="legal-nota">Las ilustraciones, diagramas y capturas de esta cartilla son de elaboración propia, a partir del caso práctico publicado en el repositorio indicado. Las fuentes consultadas se citan en el texto y se listan en las referencias, según normas APA 7.ª edición.</p>
+  <h2 class="legal-h">Build seguro, que no compile lo inseguro</h2>
+  <p class="legal-desc">Cartilla digital con recomendaciones de desarrollo seguro centradas en el proceso de compilación, la automatización del pipeline y el control de las dependencias de terceros.</p>
+  <div class="ficha">
+    <div class="ficha-fila"><span class="ficha-k">Autora</span><span class="ficha-v">Nohra María Vizcaíno Florez</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Institución</span><span class="ficha-v">Corporación Universitaria Minuto de Dios – UNIMINUTO</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Asignatura</span><span class="ficha-v">Seguridad en el Desarrollo de Software · Semana 7</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Modelo guía</span><span class="ficha-v">OWASP SAMM v2.0 (Software Assurance Maturity Model)</span></div>
+    <div class="ficha-fila"><span class="ficha-k">Caso práctico</span><span class="ficha-v"><a href="https://github.com/EspNohraViz/cartilla-build-seguro" target="_blank" rel="noopener">Repositorio Java Maven con pipeline DevSecOps</a></span></div>
+    <div class="ficha-fila"><span class="ficha-k">Fecha</span><span class="ficha-v">12 de octubre de 2026</span></div>
   </div>
+  <p class="legal-nota">Las ilustraciones, diagramas y capturas de esta cartilla son de elaboración propia, a partir del caso práctico publicado en el repositorio indicado. Las fuentes consultadas se citan en el texto y se listan en las referencias, según normas APA 7.ª edición.</p>
 </section>
 
 <!-- ═════════════════ 3. CONTENIDO ═════════════════ -->
@@ -134,14 +133,16 @@
 
 <!-- ═════════════════ 4. INTRODUCCIÓN ═════════════════ -->
 <section class="pagina" id="p4" data-titulo="Introducción">
+  <p class="etiqueta">Marco de referencia</p>
   <h2 class="titulo-pagina">Introducción</h2>
-  <div class="texto">
+  <div class="texto intro">
     <p>Durante años, la seguridad del software se ha medido casi exclusivamente por la calidad del código, es decir, que pase la revisión, que no tenga inyecciones y que valide bien las entradas. Eso sigue siendo necesario, pero ya no alcanza. Hoy buena parte del riesgo entra por otro lado, a través de las librerías de terceros que se incorporan sin revisarlas y del propio proceso que convierte el código fuente en el artefacto que llega a producción. En mis años de experiencia desarrollando y dando soporte a aplicaciones, he visto cómo una aplicación se vuelve obsoleta y cómo sus librerías van presentando fallas de seguridad que terminan volviendo vulnerables los sistemas. Ortega (2018) señala que desarrollar aplicaciones seguras, sobre todo cuando están expuestas a Internet, es la mejor defensa que tiene una organización frente a los ciberataques (p. 61). Esta cartilla parte de esa idea y la lleva un paso más allá, porque además de escribir código seguro, hay que construirlo de forma segura.</p>
-    <p>El propósito de la cartilla es ofrecer recomendaciones prácticas para asegurar el proceso de compilación y las dependencias del software, y mostrar cómo se aplican en un proyecto real. Está dirigida a desarrolladores, líderes técnicos y equipos que mantienen aplicaciones en producción, en especial en entornos Java Maven, aunque los principios sirven para cualquier tecnología. También puede ser útil para estudiantes que empiezan a acercarse a las prácticas de DevSecOps.</p>
-    <p>El contenido toma como eje la práctica <em>Secure Build</em> del modelo OWASP SAMM, que plantea construir el software de manera estandarizada y repetible, con componentes seguros, incluidas las dependencias de terceros (OWASP, 2020, p. 138). Primero se presenta el mapa de madurez de esta práctica. Luego, en cuatro capítulos, se explica cómo definir formalmente el proceso de compilación, cómo automatizarlo y proteger las herramientas que lo ejecutan, qué comprobaciones de seguridad deben ser obligatorias y cómo evaluar las dependencias. El quinto capítulo presenta el caso práctico, un pipeline en GitHub Actions que detiene el build cuando encuentra código inseguro, una librería vulnerable o una configuración débil. El sexto compara el análisis estático con el dinámico y, al final, se presentan las conclusiones.</p>
-    <p>La importancia del tema la confirma la propia comunidad de seguridad. En el OWASP Top 10 de 2025, las fallas en la cadena de suministro de software ocupan el tercer lugar, fueron la categoría más votada como primera prioridad en la encuesta comunitaria y tienen la tasa de incidencia promedio más alta en los datos analizados (OWASP, 2025). Casos como Log4Shell, en 2021, demostraron que una sola librería de registro de eventos puede dejar expuestas miles de aplicaciones cuyos equipos nunca escribieron una línea de código vulnerable.</p>
+    <p><strong>Propósito de la cartilla:</strong> Ofrecer recomendaciones prácticas para asegurar el proceso de compilación y las dependencias del software, y mostrar cómo se aplican en un proyecto real.</p>
+    <p><strong>Público objetivo:</strong> Está dirigida a desarrolladores, líderes técnicos y equipos que mantienen aplicaciones en producción, en especial en entornos Java Maven, aunque los principios sirven para cualquier tecnología. También puede ser útil para estudiantes que empiezan a acercarse a las prácticas de DevSecOps.</p>
+    <p><strong>Contenido:</strong> La cartilla toma como eje la práctica <em>Secure Build</em> del modelo OWASP SAMM, que plantea construir el software de manera estandarizada y repetible, con componentes seguros, incluidas las dependencias de terceros (OWASP, 2020, p. 138). Primero se presenta el mapa de madurez de esta práctica. Luego, en cuatro capítulos, se explica cómo definir formalmente el proceso de compilación, cómo automatizarlo y proteger las herramientas que lo ejecutan, qué comprobaciones de seguridad deben ser obligatorias y cómo evaluar las dependencias. El quinto capítulo presenta el caso práctico, un pipeline en GitHub Actions que detiene el build cuando encuentra código inseguro, una librería vulnerable o una configuración débil. El sexto compara el análisis estático con el dinámico y, al final, se presentan las conclusiones.</p>
+    <blockquote class="frase">«El código se revisa, el build se demuestra».</blockquote>
+    <p><strong>Importancia y actualidad:</strong> La relevancia del tema la confirma la propia comunidad de seguridad. En el OWASP Top 10 de 2025, las fallas en la cadena de suministro de software ocupan el tercer lugar, fueron la categoría más votada como primera prioridad en la encuesta comunitaria y tienen la tasa de incidencia promedio más alta en los datos analizados (OWASP, 2025). Casos como Log4Shell, en 2021, demostraron que una sola librería de registro de eventos puede dejar expuestas miles de aplicaciones cuyos equipos nunca escribieron una línea de código vulnerable.</p>
   </div>
-  <blockquote class="frase">«El código se revisa; el build se demuestra».</blockquote>
 </section>
 
 <!-- ═════════════════ 5. MAPA SAMM ═════════════════ -->

@@ -17,12 +17,21 @@
     puntos.appendChild(b);
   });
   const botones = Array.from(puntos.children);
+  const antInf = document.createElement('button');
+  const sigInf = document.createElement('button');
+  antInf.className = sigInf.className = 'nav-inf';
+  antInf.innerHTML = '&larr;'; sigInf.innerHTML = '&rarr;';
+  antInf.setAttribute('aria-label', 'Página anterior');
+  sigInf.setAttribute('aria-label', 'Página siguiente');
+  antInf.addEventListener('click', () => ir(actual - 1));
+  sigInf.addEventListener('click', () => ir(actual + 1));
+  puntos.prepend(antInf); puntos.append(sigInf);
 
   function marcar(i, desdeHash) {
     botones.forEach((b, j) => b.classList.toggle('activo', j === i));
     contador.textContent = (i + 1) + ' / ' + paginas.length;
-    ant.disabled = i === 0;
-    sig.disabled = i === paginas.length - 1;
+    ant.disabled = antInf.disabled = i === 0;
+    sig.disabled = sigInf.disabled = i === paginas.length - 1;
     document.title = (paginas[i].dataset.titulo || '') + ' · Build seguro';
     if (!desdeHash) history.replaceState(null, '', '#' + paginas[i].id);
   }
@@ -47,9 +56,12 @@
     const vieja = paginas[anterior];
     const nueva = paginas[i];
     animando = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => requestAnimationFrame(() => voltear(vieja, nueva, i > anterior)));
+  }
 
-    if (i > anterior) {
+  function voltear(vieja, nueva, adelante) {
+    if (adelante) {
       // hacia adelante: la hoja actual se levanta y deja ver la siguiente
       nueva.classList.add('activa', 'sin-entrada');
       vieja.classList.add('hoja', 'hoja-adelante');

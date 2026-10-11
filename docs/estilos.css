@@ -62,12 +62,11 @@ body {
   min-height: min(1100px, calc(100vh - 150px));
   box-shadow: 0 30px 60px -20px #000a, 0 0 0 1px #ffffff10;
   position: relative;
-  animation: entrar .35s ease;
 }
 .pagina.activa { display: block; }
 @keyframes entrar { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .pagina::after {
-  content: attr(data-num);
+  content: "Pág. " attr(data-num);
   position: absolute; bottom: 22px; right: 32px;
   font-family: var(--mono); font-size: 12px; color: var(--tinta-2);
 }
@@ -270,8 +269,10 @@ pre code { background: none; padding: 0; color: inherit; }
 .bloque-k { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); margin-bottom: 4px; }
 
 /* ───────── efecto de pasar la hoja ───────── */
-#libro { position: relative; perspective: 2200px; }
-.pagina.hoja { position: absolute; top: 0; left: 16px; right: 16px; z-index: 3; display: block; transform-origin: left center; backface-visibility: hidden; animation: none; }
+html, body { overflow-x: clip; }
+#libro { position: relative; perspective: 1800px; perspective-origin: 50% 200px; }
+.pagina.hoja { position: absolute; top: 0; left: 16px; right: 16px; z-index: 3; display: block; transform-origin: left top; backface-visibility: hidden; animation: none; max-height: calc(100vh - 120px); min-height: 0; overflow: hidden; }
+.pagina.sin-entrada { max-height: calc(100vh - 120px); overflow: hidden; }
 .portada.hoja { display: flex; }
 .pagina.hoja::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(to left, rgba(11,19,36,.35), rgba(11,19,36,0) 55%); opacity: 0; z-index: 5; }
 .pagina.hoja-adelante { animation: pasar-adelante .75s cubic-bezier(.45,.05,.35,1) forwards; }
@@ -297,3 +298,14 @@ pre code { background: none; padding: 0; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .pagina.hoja-adelante, .pagina.hoja-atras { animation-duration: .01s; }
 }
+
+/* navegación inferior */
+.puntos { align-items: center; }
+.puntos .nav-inf { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #ffffff30; background: var(--escritorio); color: #fff; font-size: 16px; cursor: pointer; margin: 0 10px; }
+.puntos .nav-inf:hover:not(:disabled) { background: var(--acento); color: var(--escritorio); border-color: var(--acento); }
+.puntos .nav-inf:disabled { opacity: .3; cursor: default; }
+
+/* introducción */
+.intro p { line-height: 1.75; margin-bottom: 18px; }
+.intro p strong { font-family: var(--serif); font-weight: 700; color: var(--tinta); }
+.intro .frase { margin: 28px 0; font-size: 21px; }
