@@ -28,6 +28,12 @@
     Cada dependencia que se agrega es código de terceros que entra al artefacto.
   -->
   <dependencies>
+    <!-- DEMO: versión vulnerable a Log4Shell (CVE-2021-44228). El pipeline debe detener el build. -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.14.1</version>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
